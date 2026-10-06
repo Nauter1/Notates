@@ -1,11 +1,11 @@
 import { Sequelize, DataTypes } from "sequelize";
 
-export default function WadModel(
+export default function Reaction(
     sequelize: Sequelize,
     dataTypes: typeof DataTypes
 ) {
-    const User = sequelize.define(
-        "Reactions", {
+    const Reaction = sequelize.define(
+        "Reaction", {
             id: {
                 type: dataTypes.UUIDV4
             },

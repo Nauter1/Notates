@@ -1,6 +1,6 @@
 import { Sequelize, DataTypes } from "sequelize";
 
-export default function WadModel(
+export default function User(
     sequelize: Sequelize,
     dataTypes: typeof DataTypes
 ) {
