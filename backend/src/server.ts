@@ -1,4 +1,5 @@
 import express, {type Request,type Response,type NextFunction } from "express"
+import { error } from "node:console"
 
 const app = express()
 app.use(express.json())
@@ -45,6 +46,17 @@ app.get("/reactions", (req: Request, res: Response) => {
     res.send(result);
 })
 
+app.get("/posts/:id", (req: Request, res: Response) => {
+    if (!req.params.id){
+        res.status(400).send({error: "No id given."});
+        return
+    }
+    const postId = req.params.id ? typeof req.params.id === "string" ? parseInt(req.params.id) : parseInt(req.params.id[0]!) : null
+    const result = posts.filter(post => post.id === postId)[0]
+    if (result === undefined){
+        res.status(404).send({error: "post not found"});
+        return
+    } 
 app.get("/reactions/:id",(req: Request,res:Response)=>{
     const gameId = req.params.id ?
         typeof req.params.id === "string" ? 
