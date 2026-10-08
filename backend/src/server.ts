@@ -45,6 +45,22 @@ app.get("/reactions", (req: Request, res: Response) => {
     res.send(result);
 })
 
+app.get("/reactions/:id",(req: Request,res:Response)=>{
+    const gameId = req.params.id ?
+        typeof req.params.id === "string" ? 
+            parseInt(req.params.id) 
+            : parseInt(req.params.id[0]!)
+        : null
+    const result = reactions.filter(reaction => reaction.id === gameId)[0]
+    if(result == undefined){
+        res.status(404).send({error:"Result is undefined"})
+    }
+    else if(!req.params.id!){
+        res.status(400).send({error:"GET parameters required"})
+    }
+    res.send(result)
+})
+
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`)
 })
