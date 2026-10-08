@@ -45,6 +45,12 @@ app.get("/reactions", (req: Request, res: Response) => {
     res.send(result);
 })
 
+app.get("/badges/id", (req: Request, res:Response) => {
+    
+    const result = badges.filter(badge => badge.id === parseInt(req.params.id))
+    res.send()
+})
+
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`)
 })
