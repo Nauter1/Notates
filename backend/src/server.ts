@@ -4,6 +4,11 @@ const app = express()
 app.use(express.json())
 const PORT = process.env.PORT || 3000
 
+const posts = [
+    { id: 1, title: "String Theory", content: "FilePath1", description: "Here is my song!"},
+    { id: 2, title: "Never Gonna Give You Up", content: "FilePath2", description: "Hah, Gotem"},
+    { id: 3, title: "Meridian", content: "FilePath3", description: "Song time! !"},
+]
 const reactions = [
     {id:1,name:"like", user: "sigmagoon"},
     {id:2,name:"heart", user: "alphagoon"},
@@ -14,6 +19,12 @@ const reactions = [
 app.get("/", (req: Request, res: Response) => {
     res.send("Töötab?")
 })
+
+app.get("/posts", (req: Request, res: Response) => {
+    const result = posts.map(post=>({id: post.id, title: post.title, description: post.description}))
+    res.send(result)
+})
+
 
 app.get("/reactions", (req: Request, res: Response) => {
     const result = reactions.map(reaction =>({id: reaction.id,name: reaction.name}));
