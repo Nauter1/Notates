@@ -57,6 +57,7 @@ app.get("/posts/:id", (req: Request, res: Response) => {
         res.status(404).send({error: "post not found"});
         return
     } 
+})
 app.get("/reactions/:id",(req: Request,res:Response)=>{
     const gameId = req.params.id ?
         typeof req.params.id === "string" ? 
