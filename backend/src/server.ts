@@ -58,6 +58,27 @@ app.get("/posts/:id", (req: Request, res: Response) => {
         return
     } 
 })
+
+app.post("/reactions",(req:Request,res:Response) =>{
+    const name = req.body.name
+    const user = req.body.user ? req.body.user : null
+    if(!name){
+        res.status(400).send({error:"Missing required parameter 'name'"})
+        return
+    }
+        if(!user){
+        res.status(400).send({error:"Missing required parameter 'user'"})
+        return
+    }
+    const newReaction = {
+        id: reactions.length+1,
+        name: name,
+        user: user
+    }
+    reactions.push(newReaction)
+
+})
+
 app.get("/reactions/:id",(req: Request,res:Response)=>{
     const gameId = req.params.id ?
         typeof req.params.id === "string" ? 
