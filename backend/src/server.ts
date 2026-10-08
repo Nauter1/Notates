@@ -5,11 +5,14 @@ const app = express()
 app.use(express.json())
 const PORT = process.env.PORT || 3000
 
+var postId = 0; 
 const posts = [
-    { id: 1, title: "String Theory", content: "FilePath1", description: "Here is my song!"},
-    { id: 2, title: "Never Gonna Give You Up", content: "FilePath2", description: "Hah, Gotem"},
-    { id: 3, title: "Meridian", content: "FilePath3", description: "Song time! !"},
+    { id: postId++, title: "String Theory", content: "FilePath1", description: "Here is my song!"},
+    { id: postId++, title: "Never Gonna Give You Up", content: "FilePath2", description: "Hah, Gotem"},
+    { id: postId++, title: "Meridian", content: "FilePath3", description: "Song time! !"},
 ]
+
+
 const reactions = [
     {id:1,name:"like", user: "sigmagoon"},
     {id:2,name:"heart", user: "alphagoon"},
@@ -58,6 +61,7 @@ app.get("/posts/:id", (req: Request, res: Response) => {
         return
     } 
 })
+
 app.get("/reactions/:id",(req: Request,res:Response)=>{
     const gameId = req.params.id ?
         typeof req.params.id === "string" ? 
@@ -73,6 +77,37 @@ app.get("/reactions/:id",(req: Request,res:Response)=>{
     }
     res.send(result)
 })
+
+app.post('/posts' ,(req: Request,res:Response)=> {
+    const title = req.body.title
+    const content = req.body.content
+    const description = req.body.description
+    if (!title){
+        res.status(400).send({error: "Missing Param Name"})
+        return
+    }
+    if (!content){
+        res.status(400).send({error: "Missing Param Content"})
+        return
+    }
+    if (!description){
+        res.status(400).send({error: "Missing Param Description"})
+        return
+    }
+    let newPost = {
+        id: postId++,
+        title: title,
+        content: content,
+        description: description
+    }
+    posts.push(newPost)
+    res.status(201).location('http://localhost:8080/widgets/' + (newPost.id)).send(
+        newPost
+    )
+})
+
+
+
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`)
