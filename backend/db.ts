@@ -30,7 +30,8 @@ const connect = async (): Promise<void> => {
 const db = {
     Sequelize,
     sequelize,
-    reactions: require("../backend/models/Reaction.ts")(sequelize, DataTypes)
+    reactions: require("../backend/models/Reaction.ts")(sequelize, DataTypes),
+    posts: require("../backend/models/UserPost.ts")(sequelize, DataTypes)
 };
 
 const sync = async(): Promise<void> => {
