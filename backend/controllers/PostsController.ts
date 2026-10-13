@@ -23,6 +23,15 @@ const GamesController = {
         const createdPost = await db.posts.create(newPost)
     
         return res.location(`${Utilities.getBaseURL(req)}/posts/${createdPost.id}`).sendStatus(201);
+    },
+    async getAll(req: Request, res: Response){
+        const posts = await db.posts.findAll();
+        console.log("getAll: "+posts)
+        return res.status(200).send(
+            posts.map( 
+                ({id, title}) => {return {id, title}}
+            )
+        )
     }
 }
 export default GamesController
