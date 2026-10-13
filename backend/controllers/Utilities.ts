@@ -4,6 +4,10 @@ import { Request } from "express";
 const Utilities = {
     getBaseURL (req: Request): string{
         return `${req.protocol}://${req.get("host")}`;
+    },
+    async gimmePassword(password: string): Promise<string>{
+        
+        return null
     }
 }
 

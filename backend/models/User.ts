@@ -27,6 +27,7 @@ export default function User(
             AccountType: {
                 type: dataTypes.STRING
             },
+            // Statuses: Unverified, Verified, Artist, Admin
             // LIST FOR POSTS BY USER
             // LIST FOR BADGES
             
