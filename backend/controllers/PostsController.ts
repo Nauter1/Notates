@@ -3,7 +3,7 @@ import { db } from "../db.ts"
 import Utilities from "./Utilities.ts";
 import { v7 as uuidv7 } from "uuid";
 
-const GamesController = {
+const PostsController = {
     async create (req: Request, res: Response) {
         if (
             !req.body.title ||
@@ -32,6 +32,18 @@ const GamesController = {
                 ({id, title}) => {return {id, title}}
             )
         )
+    },
+    async getByID(req: Request, res: Response){
+        const postID: String = req.params.id as string
+        console.log(postID)
+        const post = await db.posts.findByPk(postID)
+        if (!post){
+            res.status(404).send({
+                error:`Post with this ID is not found ${postID}`
+            })
+            return null;
+        }
+        return post;
     }
 }
-export default GamesController
+export default PostsController
