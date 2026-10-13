@@ -44,6 +44,30 @@ const PostsController = {
             return null;
         }
         return post;
+    },
+    async modifyById(req: Request, res: Response){
+        const postToBeModified = await this.getByID(req, res)
+        if (!postToBeModified){
+            return;
+        }
+        if (
+            !req.body.title ||
+            !req.body.content ||
+            !req.body.description
+        ){
+            return res.status(400).send({
+                error: `Missing Parameters.`
+            }
+        )
+        }
+        postToBeModified.title = req.body.title
+        postToBeModified.content = req.body.content
+        postToBeModified.description = req.body.description
+
+        await postToBeModified.save()
+
+        return res.location(`${Utilities.getBaseURL(req)}/posts/${postToBeModified.id}`)
+        .status(201).send(postToBeModified)
     }
 }
 export default PostsController
