@@ -15,7 +15,9 @@ export default function Userpost(
             content: {
                 type: dataTypes.STRING
             },
-            
+            cdescription: {
+                type: dataTypes.STRING
+            },
             // LIST FOR REACTIONS
         }
     )
