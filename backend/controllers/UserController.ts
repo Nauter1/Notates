@@ -28,4 +28,13 @@ const PostsController = {
 
         return res.location(`${Utilities.getBaseURL(req)}/users/${result.id}`).sendStatus(201);
     },
+    async getAll(req: Request, res: Response){
+        const users = await db.users.findAll();
+        console.log("getAll: "+users)
+        return res.status(200).send(
+            users.map( 
+                ({id, username}) => {return {id, username}}
+            )
+        )
+    }
 }
