@@ -48,5 +48,35 @@ const PostsController = {
             return null;
         }
         return user;
+    },
+    async modifyById(req: Request, res: Response){
+        const userToBeModified = await this.getByID(req, res)
+        if (!userToBeModified){
+            return;
+        }
+        if (
+            !req.body.username ||
+            !req.body.avatarname ||
+            !req.body.Email ||
+            !req.body.password ||
+            !req.body.Date ||
+            !req.body.AccountType
+        ){
+            return res.status(400).send({
+                error: `Missing Parameters.`
+            }
+        )
+        }
+        userToBeModified.username = req.body.username,
+        userToBeModified.avatarname = req.body.avatarname,
+        userToBeModified.Email = req.body.Email,
+        userToBeModified.PasswordHASH = await Utilities.gimmePassword(req.body.password),
+        userToBeModified.Signup = req.body.Date,
+        userToBeModified.AccountType = req.body.AccountType
+
+        await userToBeModified.save()
+
+        return res.location(`${Utilities.getBaseURL(req)}/posts/${userToBeModified.id}`)
+        .status(201).send(userToBeModified)
     }
 }
