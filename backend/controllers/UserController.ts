@@ -78,5 +78,13 @@ const PostsController = {
 
         return res.location(`${Utilities.getBaseURL(req)}/posts/${userToBeModified.id}`)
         .status(201).send(userToBeModified)
+    },
+    async deleteById(req: Request, res: Response){
+        const userToBeDeleted = await this.getByID(req, res)
+        if (!userToBeDeleted){
+            return;
+        }
+        await userToBeDeleted.destroy();
+        return res.status(204).send({error: "No content."})
     }
 }
