@@ -36,5 +36,17 @@ const PostsController = {
                 ({id, username}) => {return {id, username}}
             )
         )
+    },
+    async getByID(req: Request, res: Response){
+        const userID: String = req.params.id as string
+        console.log(userID)
+        const user = await db.posts.findByPk(userID)
+        if (!user){
+            res.status(404).send({
+                error:`User with this ID is not found ${userID}`
+            })
+            return null;
+        }
+        return user;
     }
 }
