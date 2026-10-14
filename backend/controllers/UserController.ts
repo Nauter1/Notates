@@ -12,5 +12,20 @@ const PostsController = {
         ){
             return res.status(400).send({error:`Missing Param`})
         }
+        const newUser = {
+            id: uuidv7(),
+            username: req.body.username,
+            avatarname: req.body.username,
+            Email: req.body.Email,
+            PasswordHASH: "",
+            Signup: Date.now(),
+            AccountType: "Unverified"
+
+        }
+        newUser.PasswordHASH = await Utilities.gimmePassword(req.body.password)
+
+        const result = await db.users.create(newUser);
+
+        return res.location(`${Utilities.getBaseURL(req)}/users/${result.id}`).sendStatus(201);
     },
 }

@@ -1,13 +1,16 @@
 import { Request } from "express";
-// Installi bcrypt hiljem, siia tuleb hashing ka
+import bcrypt from "bcrypt";
 
 const Utilities = {
     getBaseURL (req: Request): string{
         return `${req.protocol}://${req.get("host")}`;
     },
     async gimmePassword(password: string): Promise<string>{
-        
-        return null
+        const saltRounds = 10;
+        return await bcrypt.hash(password, saltRounds);
+    },
+    async lemmeIn(GivenPassword: string, GivenHash: string): Promise<boolean>{
+        return await bcrypt.compare(GivenPassword, GivenHash)
     }
 }
 
