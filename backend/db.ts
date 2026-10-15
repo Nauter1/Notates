@@ -31,7 +31,8 @@ const db = {
     Sequelize,
     sequelize,
     reactions: require("../backend/models/Reaction.ts")(sequelize, DataTypes),
-    posts: require("../backend/models/UserPost.ts")(sequelize, DataTypes)
+    posts: require("../backend/models/UserPost.ts")(sequelize, DataTypes),
+    users: require("../backend/models/User.ts")(sequelize, DataTypes),
 };
 
 const sync = async(): Promise<void> => {
