@@ -2,6 +2,7 @@ import { Express } from "express";
 import ReactionsController from "../controllers/ReactionsController.ts";
 import PostsController from "../controllers/PostsController.ts";
 import UserController from "../controllers/UserController.ts";
+import userPostsController from "../controllers/UserPostsController.ts";
 
 export default (app: Express): void => {
     //reaktsioonid
@@ -17,5 +18,9 @@ export default (app: Express): void => {
     //postitused - TODO
     app.route("/posts").get(PostsController.getAll).post(PostsController.create)
 
-    app.route("/posts/:id").get(PostsController.getByID).delete(PostsController.deleteByID).put(ReactionsController.modifyByID)
+    app.route("/posts/:id").get(PostsController.getByID).delete(PostsController.deleteByID).put(PostsController.modifyByID)
+
+    // userPosts
+
+    app.route("/userposts").get(userPostsController.getAll).post(userPostsController.create)
 }

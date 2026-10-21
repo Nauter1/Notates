@@ -1,11 +1,11 @@
 import { Sequelize, DataTypes } from "sequelize";
 
-export default function Userpost(
+export default function Post(
     sequelize: Sequelize,
     dataTypes: typeof DataTypes
 ) {
-    const Userpost = sequelize.define(
-        "Userpost", {
+    const Post = sequelize.define(
+        "Post", {
             id: {
                 type: dataTypes.UUIDV4
             },
