@@ -1,10 +1,10 @@
-import { Request, Response } from "express";
+import * as express from "express";
 import { db } from "../db.ts"
 import Utilities from "./Utilities.ts";
 import { v7 as uuidv7 } from "uuid";
 
 const PostsController = {
-    async create (req: Request, res: Response) {
+    async create (req: express.Request ,res: express.Response) {
         if (!req.body.username ||
             !req.body.Email ||
             !req.body.password ||
@@ -28,7 +28,7 @@ const PostsController = {
 
         return res.location(`${Utilities.getBaseURL(req)}/users/${result.id}`).sendStatus(201);
     },
-    async getAll(req: Request, res: Response){
+    async getAll(req: express.Request, res: express.Response){
         const users = await db.users.findAll();
         console.log("getAll: "+users)
         return res.status(200).send(
@@ -37,7 +37,7 @@ const PostsController = {
             )
         )
     },
-    async getByID(req: Request, res: Response){
+    async getByID(req: express.Request ,res: express.Response){
         const userID: String = req.params.id as string
         console.log(userID)
         const user = await db.posts.findByPk(userID)
@@ -49,7 +49,7 @@ const PostsController = {
         }
         return user;
     },
-    async modifyById(req: Request, res: Response){
+    async modifyById(req: express.Request, res: express.Response){
         const userToBeModified = await this.getByID(req, res)
         if (!userToBeModified){
             return;
@@ -79,7 +79,7 @@ const PostsController = {
         return res.location(`${Utilities.getBaseURL(req)}/posts/${userToBeModified.id}`)
         .status(201).send(userToBeModified)
     },
-    async deleteById(req: Request, res: Response){
+    async deleteById(req: express.Request, res: express.Response){
         const userToBeDeleted = await this.getByID(req, res)
         if (!userToBeDeleted){
             return;

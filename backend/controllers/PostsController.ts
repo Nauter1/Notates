@@ -1,10 +1,10 @@
-import { Request, Response } from "express";
+import * as express from "express";
 import { db } from "../db.ts"
 import Utilities from "./Utilities.ts";
 import { v7 as uuidv7 } from "uuid";
 
 const PostsController = {
-    async create (req: Request, res: Response) {
+    async create (req: express.Request, res: express.Response) {
         if (
             !req.body.title ||
             !req.body.content ||
@@ -24,7 +24,7 @@ const PostsController = {
     
         return res.location(`${Utilities.getBaseURL(req)}/posts/${createdPost.id}`).sendStatus(201);
     },
-    async getAll(req: Request, res: Response){
+    async getAll(req: express.Request ,res: express.Response){
         const posts = await db.posts.findAll();
         console.log("getAll: "+posts)
         return res.status(200).send(
@@ -33,7 +33,7 @@ const PostsController = {
             )
         )
     },
-    async getByID(req: Request, res: Response){
+    async getByID(req: express.Request, res: express.Response){
         const postID: String = req.params.id as string
         console.log(postID)
         const post = await db.posts.findByPk(postID)
@@ -45,7 +45,7 @@ const PostsController = {
         }
         return post;
     },
-    async modifyById(req: Request, res: Response){
+    async modifyById(req: express.Request, res: express.Response){
         const postToBeModified = await this.getByID(req, res)
         if (!postToBeModified){
             return;
@@ -69,7 +69,7 @@ const PostsController = {
         return res.location(`${Utilities.getBaseURL(req)}/posts/${postToBeModified.id}`)
         .status(201).send(postToBeModified)
     },
-    async deleteById(req: Request, res: Response){
+    async deleteById(req: express.Request, res: express.Response){
         const postToBeDeleted = await this.getByID(req, res)
         if (!postToBeDeleted){
             return;
