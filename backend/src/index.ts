@@ -1,10 +1,8 @@
+import "dotenv/config"
 import express from "express";
-import dotenv from "dotenv";
 import cors from "cors";
-import { sync } from "../../backend/db.js";
+import { sync, connect } from "../db.ts";
 import appRoutes from "../routes/appRoutes.ts"
-
-dotenv.config();
 
 const post = process.env.PORT
 const host = "localhost";
