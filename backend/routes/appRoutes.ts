@@ -1,4 +1,4 @@
-import { Express } from "express";
+import * as express from "express";
 import ReactionsController from "../controllers/ReactionsController.ts";
 import PostsController from "../controllers/PostsController.ts";
 import UserController from "../controllers/UserController.ts";

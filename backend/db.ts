@@ -40,7 +40,7 @@ const db = {
 };
 db.userPosts = require("../backend/models/UserPosts.ts")(sequelize, DataTypes, db.posts, db.users)
 db.posts.belongsToMany(db.users, {through: db.userPosts, as: "UserId"})
-db.users.belongsTo(db.games, {through: db.userPosts, as: "PostId"})
+db.users.belongsTo(db.posts, {through: db.userPosts, as: "PostId"})
 
 const sync = async(): Promise<void> => {
     await sequelize.sync({alter:true})
