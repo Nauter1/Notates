@@ -12,8 +12,19 @@ Project link: https://github.com/users/Nauter1/projects/4
 <img width="671" height="565" alt="{6D9E5453-5D4D-4CDF-9E59-87BDBAFF8BB4}" src="https://github.com/user-attachments/assets/c198ab67-347a-4301-9ede-04b7f29b1978" />
 
 # HOW TO RUN: <br/>
-Open command prompt in Notates/backend <br/>
-Run the following commands:<br/>
-npm install<br/>
-npm run dev<br/>
-//SUCCESS!!!
+Arendaja keskkonna seadistamine ja projekti käivitamine
+
+    Klooni repositoorium
+    Ava kaust VS Code-iga või muu IDE-ga
+    Ava terminal (cmd) ja mine backend kausta
+    installi Node-i paketid: npm install
+    Käivita arendus: npm run dev
+
+Lõpetamiseks käsureal klahvikombinatsioon: CTRL+C
+Produktsiooni käivitamine
+
+    backend kaustas
+    Konstrueeri produktsiooni kood käsuga: npm run build
+    Käivita toodangu kood käsuga: npm run start
+
+

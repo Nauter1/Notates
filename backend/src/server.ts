@@ -1,5 +1,4 @@
-import express, {type express.Requesttype Response,type NextFunction } from "express"
-import { error } from "node:console"
+import express, { type Request, type Response, type NextFunction } from "express"
 
 const app = express()
 app.use(express.json())
@@ -29,27 +28,27 @@ const badges = [
     { id: 6, name: "isVerifiedArtist", value: Boolean}
 
 ]
-app.get("/", (req: express.Request res:, express.Response) => {
-    res.send("Tööfgfdtab?")
+app.get("/", (req: express.Request, res: express.Response) => {
+    res.send("Server töötab.")
 })
 
-app.get("/badges", (req: express.Request res:, express.Response) => {
+app.get("/badges", (req: express.Request, res: express.Response) => {
     const result = badges.map(badge => ({id: badge.id, name: badge.name}));
     res.send(result)
 })
 
-app.get("/posts", (req: express.Request res:, express.Response) => {
+app.get("/posts", (req: express.Request, res: express.Response) => {
     const result = posts.map(post=>({id: post.id, title: post.title, description: post.description}))
     res.send(result)
 })
 
 
-app.get("/reactions", (req: express.Request res:, express.Response) => {
+app.get("/reactions", (req: express.Request, res: express.Response) => {
     const result = reactions.map(reaction =>({id: reaction.id,name: reaction.name}));
     res.send(result);
 })
 
-app.get("/posts/:id", (req: express.Request res:, express.Response) => {
+app.get("/posts/:id", (req: express.Request, res: express.Response) => {
     if (!req.params.id){
         res.status(400).send({error: "No id given."});
         return
@@ -82,7 +81,7 @@ app.post("/reactions",(req:Request,res:Response) =>{
 
 })
 
-app.get("/reactions/:id",(req: express.Requestres:Response)=>{
+app.get("/reactions/:id",(req: express.Request, res: express.Response)=>{
     const gameId = req.params.id ?
         typeof req.params.id === "string" ? 
             parseInt(req.params.id) 
@@ -98,7 +97,7 @@ app.get("/reactions/:id",(req: express.Requestres:Response)=>{
     res.send(result)
 })
 
-app.post('/posts' ,(req: express.Requestres:Response)=> {
+app.post('/posts' ,(req: express.Request, res: express.Response)=> {
     const title = req.body.title
     const content = req.body.content
     const description = req.body.description
