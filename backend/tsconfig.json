@@ -18,11 +18,12 @@
     "sourceMap": true,
     "declaration": true,
     "declarationMap": true,
+    "rewriteRelativeImportExtensions": true,
+    "allowImportingTsExtensions": true,
 
     // Stricter Typechecking Options
     "noUncheckedIndexedAccess": true,
     "exactOptionalPropertyTypes": true,
-    "allowImportingTsExtensions": true,
 
     // Style Options
     // "noImplicitReturns": true,
@@ -41,7 +42,6 @@
     "moduleDetection": "force",
     "skipLibCheck": true
   },
-  "include": [ "src/**/*" ],
-  "include": ["../db.ts"],
+  "include": [ "src/**/*", "controllers" ],
   "exclude": ["node_modules"]
 }
