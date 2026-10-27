@@ -6,11 +6,10 @@ const PORT = process.env.PORT || 3000
 
 var postId = 0; 
 const posts = [
-    { id: postId++, title: "String Theory", content: "FilePath1", description: "Here is my song!"},
-    { id: postId++, title: "Never Gonna Give You Up", content: "FilePath2", description: "Hah, Gotem"},
-    { id: postId++, title: "Meridian", content: "FilePath3", description: "Song time! !"},
+    { id: postId++, PostTitle: "String Theory", ContentLink: "FilePath1", PostDescription: "Here is my song!", ReleaseDate: "01/01/2001"},
+    { id: postId++, PostTitle: "Never Gonna Give you up", ContentLink: "FilePath2", PostDescription: "Gotem!", ReleaseDate: "01/01/2001"},
+    { id: postId++, PostTitle: "Meridian", ContentLink: "FilePath3", PostDescription: "Song time!", ReleaseDate: "01/01/2001"},
 ]
-
 
 const reactions = [
     {id:1,name:"like", user: "sigmagoon"},
@@ -38,7 +37,7 @@ app.get("/badges", (req: express.Request, res: express.Response) => {
 })
 
 app.get("/posts", (req: express.Request, res: express.Response) => {
-    const result = posts.map(post=>({id: post.id, title: post.title, description: post.description}))
+    const result = posts.map(post=>({id: post.id, PostTitle: post.PostTitle, ContentLink: post.ContentLink, PostDescription: post.PostDescription, ReleaseDate: post.ReleaseDate }))
     res.send(result)
 })
 

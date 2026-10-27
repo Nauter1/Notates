@@ -16,14 +16,15 @@ export default (app: express.Express): void => {
     app.route("/reactions/:id").get(ReactionsController.getByID).delete(ReactionsController.deleteByID).put(ReactionsController.modifyByID)
 */
     //postitused - TODO
-    app.route("/posts/:id")
-        .delete(PostsController.deleteById)   // D elete
-        .get(PostsController.getByID)         
-        .put(PostsController.modifyById)      // U pdate
 
     app.route("/posts")
         .post(PostsController.create)         // C reate
         .get(PostsController.getAll)          // R ead
+        
+    app.route("/posts/:id")
+        .delete(PostsController.deleteById)   // D elete
+        .get(PostsController.getByID)         
+        .put(PostsController.modifyById)      // U pdate
 
 
     // userPosts

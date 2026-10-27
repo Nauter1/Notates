@@ -2,72 +2,212 @@ import * as express from "express";
 import { db } from "../db.ts"
 import Utilities from "./Utilities.ts";
 import { v7 as uuidv7 } from "uuid";
+import { error } from "node:console";
+import { Post } from "../models/Post.ts";
 
 const PostsController = {
-    async create (req: express.Request, res: express.Response) {
+    async create(req: express.Request, res: express.Response)  {
         if (
-            !req.body.title ||
-            !req.body.content ||
-            !req.body.description
-        ){
-            return res.status(400).send({
-                error: `Missing Parameters, please review data.`
-            })
+            !req.body.PostTitle || 
+            !req.body.PostDescription ||
+            !req.body.ReleaseDate ||
+            !req.body.ContentLink
+        ) {
+            return res.status(400).send(
+                {
+                    error: "Missing parameters, please review data"
+                }
+            )
         }
         const newPost = {
             id: uuidv7(),
-            title: req.body.title,
-            content: req.body.content,
-            description: req.body.description
+            PostTitle: req.body.PostTitle,
+            PostDescription: req.body.PostDescription,
+            ReleaseDate: req.body.ReleaseDate,
+            ContentLink: req.body.ContentLink,
         }
-        const createdPost = await db.posts.create(newPost)
-    
-        return res.location(`${Utilities.getBaseURL(req)}/posts/${createdPost.id}`).sendStatus(201);
+        const createdPost = await db.posts.create(newPost);
+
+        return res
+        .location(`${Utilities.getBaseURL(req)}/posts/${createdPost.id}`).sendStatus(201);
     },
-    async getAll(req: express.Request ,res: express.Response){
+    async getAll(req: express.Request, res: express.Response) {
         const posts = await db.posts.findAll();
         console.log("getAll: "+posts)
-        return res.status(200).send(
-            posts.map( 
-                ({id, title}) => {return {id, title}}
+        return res
+        .status(200)
+        .send(
+            posts.map
+            (
+                ({id, PostTitle}) => {return {id, PostTitle}}
             )
         )
     },
-    async getByID(req: express.Request, res: express.Response){
-        const postID: String = req.params.id as string
+    async getByID(req: express.Request, res: express.Response) {
+        
+        const post = await PostsController.getPost(req, res)
+        if (!post) {
+            console.log("no post")
+            return
+        }
+        console.log("Post is found")
+        return res.status(200).send(post);
+    },
+    async modifyById(req: express.Request, res: express.Response) {
+        if (!req.params.id) 
+            {
+                console.log(req.params.id)
+                return res.status(400).send({"error":"No id supplied"})
+            }     
+            console.log(req.params.id)
+        const postToBeModified = await PostsController.getPost(req, res)
+        console.log(postToBeModified)
+        if (!postToBeModified) {
+            console.log("Game not found")
+            return res.status(404).send({"error":"Post not found with id "+postToBeModified});
+        }
+        if (
+            !req.body.PostTitle || 
+            !req.body.PostDescription ||
+            !req.body.ReleaseDate ||
+            !req.body.ContentLink
+        ) {
+            console.log(req.body.PostTitle+" "+req.body.PostDescription+" "+req.body.ReleaseDate+" "+req.body.ContentLink)
+            return res.status(400).send(
+                {
+                    error: "Missing parameters, please review data"
+                }
+            )
+        }
+        const modifiedPost = {
+
+            id: uuidv7(),
+            PostTitle: req.body.PostTitle,
+            PostDescription: req.body.PostDescription,
+            ReleaseDate: req.body.ReleaseDate,
+            ContentLink: req.body.ContentLink,
+            updatedAt: new Date(),
+        }
+
+        console.log("---")
+        console.log(modifiedPost)
+        console.log("---")
+
+        await db.posts.update(modifiedPost, { where: {id: req.params.id}})
+
+        return res.location(`${Utilities.getBaseURL(req)}/posts/${postToBeModified}`)
+        .status(201)
+        .send(modifiedPost)
+    },
+    async deleteById(req: express.Request, res: express.Response) {
+        const postToBeDeleted = await PostsController.getPost(req, res)
+        if (!postToBeDeleted) {
+            return;
+        }
+        await postToBeDeleted.destroy();
+        return res.status(204)
+        .send({error: "No content."})
+
+    },
+    async getPost(req: express.Request, res: express.Response) {
+        let postID: string = req.params.id as string
         console.log(postID)
-        const post = await db.posts.findByPk(postID)
-        if (!post){
+        const post = await db.posts.findByPk(postID);
+        if (!post) {
+            console.log("Game not found")
             res.status(404).send({
-                error:`Post with this ID is not found ${postID}`
+                error: `Game with this ID is not found. ${postID}`
+            })
+            return null;
+        }
+        return post
+    }
+}
+
+export default PostsController
+
+/*import * as express from "express";
+import { db } from "../db.ts"
+import Utilities from "./Utilities.ts";
+import { v7 as uuidv7 } from "uuid";
+
+const PostsController = {
+    async create(req: express.Request, res: express.Response)  {
+        if (
+            !req.body.PostTitle || 
+            !req.body.PostDescription ||
+            !req.body.ReleaseDate ||
+            !req.body.ContentLink
+        ) {
+            return res.status(400).send(
+                {
+                    error: "Missing parameters, please review data"
+                }
+            )
+        }
+        const newPost = {
+            id: uuidv7(),
+            PostTitle: req.body.PostTitle,
+            PostDescription: req.body.PostDescription,
+            ReleaseDate: req.body.ReleaseDate,
+            ContentLink: req.body.ContentLink,
+        }
+        const createdGame = await db.posts.create(newPost);
+
+        return res
+        .location(`${Utilities.getBaseURL(req)}/games/${createdGame.id}`).sendStatus(201);
+    },
+    async getAll(req: express.Request, res: express.Response) {
+        const posts = await db.posts.findAll();
+        console.log("getAll: "+posts)
+        return res
+        .status(200)
+        .send(
+            posts.map
+            (
+                ({id, PostTitle}) => {return {id, PostTitle}}
+            )
+        )
+    },
+    async getByID(req: express.Request, res: express.Response) {
+        let postID: string = req.params.id as string
+        console.log(postID)
+        const post = await db.posts.findByPk(postID);
+        if (!post) {
+            res.status(404).send({
+                error: `Game with this ID is not found. ${postID}`
             })
             return null;
         }
         return post;
     },
-    async modifyById(req: express.Request, res: express.Response){
+    async modifyById(req: express.Request, res: express.Response) {
         const postToBeModified = await this.getByID(req, res)
-        if (!postToBeModified){
+        if (!postToBeModified) {
             return;
         }
         if (
-            !req.body.title ||
-            !req.body.content ||
-            !req.body.description
-        ){
-            return res.status(400).send({
-                error: `Missing Parameters.`
-            }
-        )
+            !req.body.PostTitle || 
+            !req.body.PostDescription ||
+            !req.body.ReleaseDate ||
+            !req.body.ContentLink
+        ) {
+            return res.status(400).send(
+                {
+                    error: "Missing parameters, please review data"
+                }
+            )
         }
-        postToBeModified.title = req.body.title
-        postToBeModified.content = req.body.content
-        postToBeModified.description = req.body.description
+        postToBeModified.PostTitle = req.body.PostTitle,
+        postToBeModified.PostDescription = req.body.PostDescription,
+        postToBeModified.ReleaseDate = req.body.ReleaseDate,
+        postToBeModified.ContentLink = req.body.ContentLink,
 
         await postToBeModified.save()
 
         return res.location(`${Utilities.getBaseURL(req)}/posts/${postToBeModified.id}`)
-        .status(201).send(postToBeModified)
+        .status(201)
+        .send(postToBeModified)
     },
     async deleteById(req: express.Request, res: express.Response){
         const postToBeDeleted = await this.getByID(req, res)
@@ -78,4 +218,4 @@ const PostsController = {
         return res.status(204).send({error: "No content."})
     }
 }
-export default PostsController
+export default PostsController*/
