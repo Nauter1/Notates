@@ -1,90 +1,146 @@
 import * as express from "express";
-import { db } from "../db.ts"
+import { db } from "../db.ts";
 import Utilities from "./Utilities.ts";
 import { v7 as uuidv7 } from "uuid";
+import { User } from "../models/User.ts"
 
-const PostsController = {
-    async create (req: express.Request ,res: express.Response) {
-        if (!req.body.username ||
-            !req.body.Email ||
-            !req.body.password ||
-            !req.body.passwordconfirm 
-        ){
-            return res.status(400).send({error:`Missing Param`})
+const UsersController = {
+    async create(req: express.Request, res: express.Response) {
+        if (!req.body.UserName || 
+        !req.body.EmailAddress ||
+        !req.body.Password ||
+        !req.body.PasswordConfirmation) {
+            return res.status(400)
+            .send({error:"Missing parameters, please check your info."})
         }
-        const newUser = {
+        if (req.body.Password != req.body.PasswordConfirmation) 
+            {
+            return res.status(406)
+            .send({error:"Passwords do not match, please check your info."})            
+        }
+
+        const passwordHash = await Utilities.gimmePassword(req.body.Password)
+
+        const result = await db.users.create({
             id: uuidv7(),
-            username: req.body.username,
-            avatarname: req.body.username,
-            Email: req.body.Email,
-            PasswordHASH: "",
-            Signup: Date.now(),
-            AccountType: "Unverified"
-
-        }
-        newUser.PasswordHASH = await Utilities.gimmePassword(req.body.password)
-
-        const result = await db.users.create(newUser);
+            UserName: req.body.UserName,
+            AvatarName: req.body.AvatarName,
+            EmailAddress: req.body.EmailAddress,
+            AccountType: "unverified",
+            PasswordHash: passwordHash
+        });
 
         return res.location(`${Utilities.getBaseURL(req)}/users/${result.id}`).sendStatus(201);
+
     },
-    async getAll(req: express.Request, res: express.Response){
+    async getAll(req: express.Request, res: express.Response) {
         const users = await db.users.findAll();
-        console.log("getAll: "+users)
-        return res.status(200).send(
-            users.map( 
-                ({id, username}) => {return {id, username}}
-            )
-        )
+        console.log("getAll"+users)
+        return res.status(200).send(users.map(
+            ({id, UserName, AccountType, EmailAddress }) => {return {id, UserName, AccountType, EmailAddress}}
+        ))
     },
-    async getByID(req: express.Request ,res: express.Response){
-        const userID: String = req.params.id as string
-        console.log(userID)
-        const user = await db.posts.findByPk(userID)
-        if (!user){
-            res.status(404).send({
-                error:`User with this ID is not found ${userID}`
-            })
+    async getById(req: express.Request, res: express.Response) {
+        const user = await UsersController.getUser(req, res)
+        if (!user) {
+            return
+        }
+        return res.status(200).send(user)
+    },
+    async modifyById(req: express.Request, res: express.Response) {
+        if (!req.params.id) {
+            return res.status(400).send({"error":"No id supplied"})
+        }
+        console.log("++++++ id is"+req.params.id)
+        const userToBeModified = await UsersController.getUser(req, res) as User
+        console.log("++++++ user is"+userToBeModified)
+        if (!req.body) {
+            return res.status(400).send({"error":"No body was supplied, nothing was changed"})
+        }
+
+        console.log("++++++ body: "+req.body)
+        const modifiedUser = new User()
+
+        modifiedUser.UserName = userToBeModified.UserName
+        modifiedUser.AvatarName = userToBeModified.AvatarName;
+        modifiedUser.PasswordHash = userToBeModified.PasswordHash
+        modifiedUser.SignupDate = userToBeModified.SignupDate
+        modifiedUser.AccountType = userToBeModified.AccountType
+        modifiedUser.EmailAddress = userToBeModified.EmailAddress
+        modifiedUser.UserCollectionID = userToBeModified.UserCollectionID
+        modifiedUser.ReviewListID = userToBeModified.ReviewListID
+        modifiedUser.ProfileID = userToBeModified.ProfileID
+        modifiedUser.CredentialID = userToBeModified.CredentialID
+        modifiedUser.createdAt = userToBeModified.createdAt
+
+        if (req.body.UserName) {
+            modifiedUser.UserName = req.body.UserName
+        }
+        if (req.body.Password) {
+            //kontrolli olemasoleva paswordi hashide samasust
+            if (req.body.Password != req.body.PasswordConfirmation) 
+            {
+            return res.status(406)
+            .send({error:"Passwords do not match, please check your info."})            
+            } else {
+                const passwordHash = await Utilities.gimmePassword(req.body.Password)
+            }
+            //kui ok, siis proceed
+            //hashi uus password
+        }
+        if (req.body.UserStatus) {
+            modifiedUser.AccountType = req.body.AccountType
+        }
+        if (req.body.AvatarName) {
+            modifiedUser.AccountType = req.body.AvatarName
+        }
+        if (req.body.UserCollectionID) {
+            modifiedUser.UserCollectionID = req.body.UserCollectionID
+        }
+        if (req.body.ReviewListID) {
+            modifiedUser.ReviewListID = req.body.ReviewListID
+        }
+        if (req.body.ProfileID) {
+            modifiedUser.ProfileID = req.body.ProfileID
+        }
+        if (req.body.EmailAddress) {
+
+            console.log("++++++ found email is")
+            modifiedUser.EmailAddress = req.body.EmailAddress
+        }
+        if (req.body.CredentialID) {
+            modifiedUser.CredentialID = req.body.CredentialID
+        }
+        modifiedUser.updatedAt = new Date()
+        console.log("++++++ modifieduser is: "+modifiedUser)
+        await db.users.update(modifiedUser, {
+            where: {
+                id: req.params.id
+            }
+        })
+        return res.location(`${Utilities.getBaseURL(req)}/users/${userToBeModified}`).status(201).send(modifiedUser)
+    },
+    async deleteById(req: express.Request, res: express.Response) {
+        const userToBeDeleted = await UsersController.getUser(req, res)
+        if (!userToBeDeleted) {
+            return            
+        }
+        await userToBeDeleted.destroy();
+        return res.status(204).send({error :"No Content"})
+    },
+    async getUser(req: express.Request, res: express.Response) {
+        let userID: string = req.params.id as string
+        //console.log(userID)
+        const user = await db.users.findByPk(userID);
+        if(!user) {
+            res.status(404).send(
+                {
+                    error: `user with this id does not exist: ${userID}`
+                }
+            )
             return null;
         }
         return user;
-    },
-    async modifyById(req: express.Request, res: express.Response){
-        const userToBeModified = await this.getByID(req, res)
-        if (!userToBeModified){
-            return;
-        }
-        if (
-            !req.body.username ||
-            !req.body.avatarname ||
-            !req.body.Email ||
-            !req.body.password ||
-            !req.body.Date ||
-            !req.body.AccountType
-        ){
-            return res.status(400).send({
-                error: `Missing Parameters.`
-            }
-        )
-        }
-        userToBeModified.username = req.body.username,
-        userToBeModified.avatarname = req.body.avatarname,
-        userToBeModified.Email = req.body.Email,
-        userToBeModified.PasswordHASH = await Utilities.gimmePassword(req.body.password),
-        userToBeModified.Signup = req.body.Date,
-        userToBeModified.AccountType = req.body.AccountType
-
-        await userToBeModified.save()
-
-        return res.location(`${Utilities.getBaseURL(req)}/posts/${userToBeModified.id}`)
-        .status(201).send(userToBeModified)
-    },
-    async deleteById(req: express.Request, res: express.Response){
-        const userToBeDeleted = await this.getByID(req, res)
-        if (!userToBeDeleted){
-            return;
-        }
-        await userToBeDeleted.destroy();
-        return res.status(204).send({error: "No content."})
     }
 }
+export default UsersController

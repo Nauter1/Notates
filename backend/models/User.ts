@@ -10,7 +10,8 @@ export class User extends Model<InferAttributes<User>, InferCreationAttributes<U
   // Valikulised väljad uue kasutaja loomisel (kuna neil on vaikeväärtus või nad on nullitavad):
   declare id: CreationOptional<string>; // Kui andmebaas/Sequelize genereerib UUID ise
   declare SignupDate: CreationOptional<string>; 
-  declare UserStatus: CreationOptional<string>;
+  declare AccountType: CreationOptional<string>;
+  declare AvatarName: CreationOptional<string>;
   declare UserCollectionID: CreationOptional<string | null>;
   declare ReviewListID: CreationOptional<string | null>;
   declare ProfileID: CreationOptional<string | null>;
@@ -40,9 +41,13 @@ export default function initUserModel(sequelize: Sequelize) {
         type: DataTypes.DATEONLY,
         defaultValue: DataTypes.NOW, // Fikseerib loomise hetke kuupäeva
       },
-      UserStatus: {
+      AccountType: {
         type: DataTypes.STRING,
         defaultValue: "unverified",
+      },
+      AvatarName: {
+        type: DataTypes.STRING,
+        allowNull: false,
       },
       UserCollectionID: {
         type: DataTypes.STRING,

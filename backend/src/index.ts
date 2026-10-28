@@ -5,7 +5,7 @@ import { sync, connect } from "../db.ts";
 import appRoutes from "../routes/appRoutes.ts"
 import { error } from "node:console";
 
-const post = process.env.PORT
+const port = process.env.PORT
 const host = "localhost";
 
 const app = express();
