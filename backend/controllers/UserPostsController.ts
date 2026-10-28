@@ -5,6 +5,7 @@ import { v7 as uuidv7 } from "uuid";
 import { error } from "node:console";
 import * as UUID from "node:crypto";
 import { DATE } from "sequelize";
+import type { UserPosts } from "../models/UserPosts.ts";
 
 const UserPostsController = {
     async create(req: express.Request, res: express.Response) {
@@ -33,7 +34,36 @@ const UserPostsController = {
         const addedUserPosts = await db.userPosts.create(newUserPosts)
 
         return res.location(`${Utilities.getBaseURL(req)}/userposts/${addedUserPosts.id}`).sendStatus(201)
-    }
+    },
+    async modifyById(req: express.Request, res: express.Response) {
+        if (!req.params.id) {
+            console.log(req.params.id)
+            return res.status(400).send({"error":"No id supplied"})
+        }
+        if (!req.body) {
+            return res.status(400).send({"error":"No body was supplied, nothing was changed"})
+        }
+
+        const userPostToBeModified = await UserPostsController.getUserPosts(req, res)
+
+        if (!userPostToBeModified) {
+            return res.status(404).send({"error":"UserCollection not found with id "+req.params.id});
+        }
+
+        //eeldame et vaade annab vanad andmed ka kaasa
+        const modifiedUserPost = {
+
+        } as UserPosts
+        modifiedUserPost.updatedAt = new Date()
+
+        await db.userPosts.update(modifiedUserPost, {
+            where:{
+                id: req.params.id
+            }
+        })
+        return res.location(`${Utilities.getBaseURL(req)}/userposts/${userPostToBeModified}`).status(201).send(modifiedUserPost)
+
+    },
 }
 export default UserPostsController
 
