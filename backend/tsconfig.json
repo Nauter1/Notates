@@ -1,8 +1,11 @@
 {
   // Visit https://aka.ms/tsconfig to read more about this file
   "compilerOptions": {
+  "esModuleInterop": true,
+  "allowSyntheticDefaultImports": true,
+
     // File Layout
-    "rootDir": "./src",
+    "rootDir": "../backend",
     "outDir": "./dist",
 
     // Environment Settings
@@ -18,7 +21,8 @@
     "sourceMap": true,
     "declaration": true,
     "declarationMap": true,
-    "rewriteRelativeImportExtensions": true,
+    //"rewriteRelativeImportExtensions": true,
+    "noEmit": true,
     "allowImportingTsExtensions": true,
 
     // Stricter Typechecking Options

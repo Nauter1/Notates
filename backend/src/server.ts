@@ -36,10 +36,7 @@ app.get("/badges", (req: express.Request, res: express.Response) => {
     res.send(result)
 })
 
-app.get("/posts", (req: express.Request, res: express.Response) => {
-    const result = posts.map(post=>({id: post.id, PostTitle: post.PostTitle, ContentLink: post.ContentLink, PostDescription: post.PostDescription, ReleaseDate: post.ReleaseDate }))
-    res.send(result)
-})
+
 
 
 app.get("/reactions", (req: express.Request, res: express.Response) => {
@@ -47,18 +44,7 @@ app.get("/reactions", (req: express.Request, res: express.Response) => {
     res.send(result);
 })
 
-app.get("/posts/:id", (req: express.Request, res: express.Response) => {
-    if (!req.params.id){
-        res.status(400).send({error: "No id given."});
-        return
-    }
-    const postId = req.params.id ? typeof req.params.id === "string" ? parseInt(req.params.id) : parseInt(req.params.id[0]!) : null
-    const result = posts.filter(post => post.id === postId)[0]
-    if (result === undefined){
-        res.status(404).send({error: "post not found"});
-        return
-    } 
-})
+
 
 app.post("/reactions",(req:Request,res:Response) =>{
     const name = req.body.name
@@ -96,10 +82,29 @@ app.get("/reactions/:id",(req: express.Request, res: express.Response)=>{
     res.send(result)
 })
 
+app.get("/posts", (req: express.Request, res: express.Response) => {
+    const result = posts.map(post=>({id: post.id, PostTitle: post.PostTitle, ContentLink: post.ContentLink, PostDescription: post.PostDescription, ReleaseDate: post.ReleaseDate }))
+    res.send(result)
+})
+
+app.get("/posts/:id", (req: express.Request, res: express.Response) => {
+    if (!req.params.id){
+        res.status(400).send({error: "No id given."});
+        return
+    }
+    const postId = req.params.id ? typeof req.params.id === "string" ? parseInt(req.params.id) : parseInt(req.params.id[0]!) : null
+    const result = posts.filter(post => post.id === postId)[0]
+    if (result === undefined){
+        res.status(404).send({error: "post not found"});
+        return
+    } 
+})
+
 app.post('/posts' ,(req: express.Request, res: express.Response)=> {
     const title = req.body.title
     const content = req.body.content
     const description = req.body.description
+    const releasedate = req.body.releasedate
     if (!title){
         res.status(400).send({error: "Missing Param Name"})
         return
@@ -114,12 +119,13 @@ app.post('/posts' ,(req: express.Request, res: express.Response)=> {
     }
     let newPost = {
         id: postId++,
-        title: title,
-        content: content,
-        description: description
+        PostTitle: title,
+        ContentLink: content,
+        PostDescription: description,
+        ReleaseDate: releasedate
     }
     posts.push(newPost)
-    res.status(201).location('http://localhost:8080/widgets/' + (newPost.id)).send(
+    res.status(201).location('http://localhost:8080/posts/' + (newPost.id)).send(
         newPost
     )
 })
