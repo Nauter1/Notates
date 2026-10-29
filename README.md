@@ -16,9 +16,9 @@ Arendaja keskkonna seadistamine ja projekti käivitamine
 
     Klooni repositoorium
     Ava kaust VS Code-iga või muu IDE-ga
-    Ava terminal (cmd) ja mine backend kausta
+    Ava terminal (cmd) ja mine backend kausta: cd backend
     installi Node-i paketid: npm install
-    Tee kindlaks et .env on olemas ja info on täidetud kohaliku või zone.ee mariadb jaoks.
+    Tee kindlaks et .env on olemas (backend kaustas) ja info on täidetud kohaliku või zone.ee mariadb jaoks.
     Käivita arendus: npm run dev
 
     NÄIDIS POST KÄSUD
