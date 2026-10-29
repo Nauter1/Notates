@@ -7,18 +7,14 @@ import { Post } from "../models/Post.ts";
 
 const PostsController = {
     async create(req: express.Request, res: express.Response)  {
-        if (
-            !req.body.PostTitle || 
-            !req.body.PostDescription ||
-            !req.body.ReleaseDate ||
-            !req.body.ContentLink
-        ) {
-            return res.status(400).send(
-                {
-                    error: "Missing parameters, please review data"
-                }
-            )
-        }
+        const requiredFields = ["PostTitle","PostDescription","ReleaseDate","ContentLink"]
+        const missingFields = requiredFields.filter(field => !req.body[field]);
+        if (missingFields.length > 0){
+            return res.status(400).send({
+                error: "Missing Params, please check these over.",
+                missing: missingFields
+            })
+        }   
         const newPost = {
             id: uuidv7(),
             PostTitle: req.body.PostTitle,
@@ -63,25 +59,49 @@ const PostsController = {
         const postToBeModified = await PostsController.getPost(req, res)
         console.log(postToBeModified)
         if (!postToBeModified) {
-            console.log("Game not found")
+            console.log("Post not found")
             return res.status(404).send({"error":"Post not found with id "+postToBeModified});
         }
         if (
-            !req.body.PostTitle || 
-            !req.body.PostDescription ||
-            !req.body.ReleaseDate ||
-            !req.body.ContentLink
+            !req.body.PostTitle
         ) {
-            console.log(req.body.PostTitle+" "+req.body.PostDescription+" "+req.body.ReleaseDate+" "+req.body.ContentLink)
             return res.status(400).send(
                 {
-                    error: "Missing parameters, please review data"
+                    error: "Missing parameter: PostTitle"
                 }
             )
         }
+        if (
+            !req.body.PostDescription
+        ) {
+            return res.status(400).send(
+                {
+                    error: "Missing parameter: PostDescription"
+                }
+            )
+        }
+        if (
+            !req.body.ReleaseDate
+        ) {
+            return res.status(400).send(
+                {
+                    error: "Missing parameter: ReleaseDate"
+                }
+            )
+        }
+        if (
+            !req.body.ContentLink
+        ) {
+            return res.status(400).send(
+                {
+                    error: "Missing parameter: ContentLink"
+                }
+            )
+        }
+        const idString = req.params.id.toString();
         const modifiedPost = {
 
-            id: uuidv7(),
+            id: idString,
             PostTitle: req.body.PostTitle,
             PostDescription: req.body.PostDescription,
             ReleaseDate: req.body.ReleaseDate,
@@ -114,9 +134,9 @@ const PostsController = {
         console.log(postID)
         const post = await db.posts.findByPk(postID);
         if (!post) {
-            console.log("Game not found")
+            console.log("Post not found")
             res.status(404).send({
-                error: `Game with this ID is not found. ${postID}`
+                error: `Post with this ID is not found. ${postID}`
             })
             return null;
         }

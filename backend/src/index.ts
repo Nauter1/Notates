@@ -1,20 +1,18 @@
-import "dotenv/config"
+import "dotenv/config";
 import express from "express";
 import cors from "cors";
-import { sync, connect } from "../db.ts";
-import appRoutes from "../routes/appRoutes.ts"
-import { error } from "node:console";
+import { sync } from "../db.ts"
 
-const port = process.env.PORT
+import appRoutes from "../routes/appRoutes.ts";
+
+const port = process.env.PORT || 3000;
 const host = "localhost";
 
 const app = express();
 
 app.use(cors())
-app.use(express.json());
-
+app.use(express.json())
 appRoutes(app);
-
 
 app.listen(port, async () => {
     if (process.env.SYNC === "true") {
@@ -22,6 +20,3 @@ app.listen(port, async () => {
     }
     console.log(`api jookseb aadressil http://${host}:${port}`)
 })
-
-
-//bro fak tis cood
