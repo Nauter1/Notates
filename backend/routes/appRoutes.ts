@@ -43,7 +43,7 @@ export default (app: express.Express): void => {
 
     app.route("/badges")
         .post(checkRequestBody, BadgesController.create)
-        .get(BadgesController.getBadge)
+        .get(BadgesController.getAll)
 
     app.route("/badges/:id")
         .delete(BadgesController.deleteById)

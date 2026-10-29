@@ -123,7 +123,18 @@ const BadgesController = {
     await badgeToBeDeleted.destroy();
 
     return res.status(204).send();
-}
+},
+async getAll(req: express.Request, res: express.Response) {
+    try {
+        const badges = await db.badges.findAll();
+        return res.status(200).json(badges);
+    } catch (err) {
+        console.error("Error retrieving badges:", err);
+        return res.status(500).json({
+            error: "Failed to retrieve badges"
+        });
+    }
+},
 
          
 }
