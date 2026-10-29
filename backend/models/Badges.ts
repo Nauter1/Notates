@@ -54,10 +54,10 @@ export default function initBadgesModel(sequelize: Sequelize)
                 //reference some other value? or keep this
             },
             isPlusMember: {
-                type: DataTypes.NUMBER,
+                type: DataTypes.BOOLEAN,
             },
             reactionCount: {
-                type: DataTypes.NUMBER,
+                type: DataTypes.INTEGER,
             },
             isVerifiedArtist: {
                 type: DataTypes.BOOLEAN,
@@ -83,3 +83,5 @@ export default function initBadgesModel(sequelize: Sequelize)
 //     { id: 6, name: "isVerifiedArtist", value: Boolean} ye
 
 // ]
+
+// {"id":"01a18710-a6c5-73c8-b9bc-f07aeb27dcc4","Title":"Verified Artist","Description":"Awarded to verified artists on Notates","DateObtained":"2026-10-29T10:00:00.000Z","JoinDate":"2026-01-15T00:00:00.000Z","isAdmin":false,"postCount":25,"isPlusMember":false,"reactionCount":150,"isVerifiedArtist":false,"updatedAt":"2026-10-29T09:49:37.863Z","createdAt":"2026-10-29T09:49:37.863Z"}

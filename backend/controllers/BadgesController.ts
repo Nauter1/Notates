@@ -8,57 +8,47 @@ import { User } from "../models/User.ts"
 
 const BadgesController = {
      async create(req: express.Request, res: express.Response) {
-        if (
-            !req.body.Title || 
-            !req.body.Description
-        ) {
-            return res.status(400).send(
-                {
-                    error: "Missing parameters, please review data"
-                }
-            )
-        }
-
-        const result = await db.badges.create({
-            id: uuidv7(),
-            Title: req.body.Title,
-            Description: req.body.Description,
-            DateObtained: req.body.DateObtained,
-            JoinDate: req.body.JoinDate,
-            isAdmin: false,
-            postCount: req.body.postCount,
-            isPlusMember: false,
-            reactionCount: req.body.reactionCount,
-            isVerifiedArtist: false
+    if (!req.body.Title || !req.body.Description) {
+        return res.status(400).send({
+            error: "Missing parameters, please review data"
         });
-     },
+    }
+
+    const result = await db.badges.create({
+        id: uuidv7(),
+        Title: req.body.Title,
+        Description: req.body.Description,
+        DateObtained: req.body.DateObtained,
+        JoinDate: req.body.JoinDate,
+        isAdmin: false,
+        postCount: req.body.postCount ?? 0,
+        isPlusMember: false,
+        reactionCount: req.body.reactionCount ?? 0,
+        isVerifiedArtist: false
+    });
+
+    return res.status(201).json(result);
+},
 
      async getBadge(req: express.Request, res: express.Response) {
-        let badgeID: string = req.params.id as string
-        //console.log(badgeID)
-        const badge = await db.badges.findByPk(badgeID);
-        if(!badge) {
-            res.status(404).send(
-                {
-                    error: `badge with this id does not exist: ${badgeID}`
-                }
-            )
-            return null;
-        }
-        let userID: string = req.params.id as string
-        //console.log(userID)
-        const user = await db.users.findByPk(userID);
-        if(!user) {
-            res.status(404).send(
-                {
-                    //then returns 404 if user does not exist)
-                    error: `user with this id does not exist: ${userID}`
-                }
-            )
-            return null;
-        }
-        return badge;
-     },
+    const badgeID = req.params.id as string;
+
+    if (!badgeID) {
+        return res.status(400).send({
+            error: "No badge id supplied"
+        });
+    }
+
+    const badge = await db.badges.findByPk(badgeID);
+
+    if (!badge) {
+        return res.status(404).send({
+            error: `Badge with this id does not exist: ${badgeID}`
+        });
+    }
+
+    return res.status(200).json(badge);
+}, //user + badge will me done later, right now i need my badges to be gettable.
      async modifyById(req: express.Request, res: express.Response) {
     if (!req.params.id) {
         return res.status(400).send({
@@ -112,6 +102,10 @@ const BadgesController = {
              }
              await badgeToBeDeleted.destroy();
              return res.status(204).send({error :"No Content"})
-         }
+         },
+
+    
+
+         
 }
 export default BadgesController
