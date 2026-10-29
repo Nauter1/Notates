@@ -7,6 +7,7 @@ import checkRequestBody from "../controllers/middleware/checkRequestBody.ts";
 //import UserController from "../controllers/UserController.ts";
 //import userPostsController from "../controllers/UserPostsController.ts";
 
+
 export default (app: express.Express): void => {
     //reaktsioonid
     app.route("/reactions")
