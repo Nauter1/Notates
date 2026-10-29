@@ -1,6 +1,8 @@
 import type express from "express"
 import ReactionsController from "../controllers/ReactionsController.ts";
 import PostsController from "../controllers/PostsController.ts";
+import { Badges } from "../models/Badges.ts";
+import BadgesController from "../controllers/BadgesController.ts";
 //import UserController from "../controllers/UserController.ts";
 //import userPostsController from "../controllers/UserPostsController.ts";
 
@@ -33,6 +35,16 @@ export default (app: express.Express): void => {
         .delete(PostsController.deleteById)   // D elete
         .get(PostsController.getByID)
         .put(PostsController.modifyById)      // U pdate
+
+    app.route("/badges")
+        .post(BadgesController.create)
+        .get(BadgesController.getBadge)
+
+    app.route("/badges/:id")
+        .delete(BadgesController.deleteById)
+        .get(BadgesController.getBadge)
+        .put(BadgesController.modifyById)
+
 
     // userPosts
 
