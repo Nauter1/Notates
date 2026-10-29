@@ -19,6 +19,9 @@ export default (app: express.Express): void => {
     app.route("/reactions/reaction")
         .post(checkRequestBody, ReactionsController.createReaction)
 
+    app.route("/reactions/:id")
+        .delete(ReactionsController.deleteById)
+        
     // TODO: add these once the handlers exist in ReactionsController
     // app.route("/reactions/:id")
     //     .get(ReactionsController.getByID)
