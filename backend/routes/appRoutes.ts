@@ -5,6 +5,7 @@ import { Badges } from "../models/Badges.ts";
 import BadgesController from "../controllers/BadgesController.ts";
 //import UserController from "../controllers/UserController.ts";
 //import userPostsController from "../controllers/UserPostsController.ts";
+import checkRequestBody from "../controllers/middleware/checkRequestBody.ts";
 
 export default (app: express.Express): void => {
     //reaktsioonid
@@ -28,13 +29,13 @@ export default (app: express.Express): void => {
     //postitused - TODO
 
     app.route("/posts")
-        .post(PostsController.create)         // C reate
+        .post(checkRequestBody, PostsController.create)         // C reate
         .get(PostsController.getAll)          // R ead
 
     app.route("/posts/:id")
         .delete(PostsController.deleteById)   // D elete
         .get(PostsController.getByID)
-        .put(PostsController.modifyById)      // U pdate
+        .put(checkRequestBody, PostsController.modifyById)      // U pdate
 
     app.route("/badges")
         .post(BadgesController.create)
