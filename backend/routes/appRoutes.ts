@@ -6,7 +6,7 @@ import BadgesController from "../controllers/BadgesController.ts";
 import checkRequestBody from "../controllers/middleware/checkRequestBody.ts";
 //import UserController from "../controllers/UserController.ts";
 //import userPostsController from "../controllers/UserPostsController.ts";
-import checkRequestBody from "../controllers/middleware/checkRequestBody.ts";
+
 
 export default (app: express.Express): void => {
     //reaktsioonid

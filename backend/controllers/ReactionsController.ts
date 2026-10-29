@@ -12,7 +12,7 @@ const ReactionsController = {
 
         if (!Content /*|| !PostID || !UserID*/) {
             return res.status(400).send({
-                error: "Missing parameters, please review data",
+                error: "Comment content missing",
             });
         }
 
@@ -42,7 +42,7 @@ const ReactionsController = {
 
         if (!Content /*|| !PostID || !UserID*/) {
             return res.status(400).send({
-                error: "Missing parameters, please review data",
+                error: "Reaction content missing",
             });
         }
 
