@@ -30,25 +30,33 @@ const BadgesController = {
     return res.status(201).json(result);
 },
 
-     async getBadge(req: express.Request, res: express.Response) {
-    const badgeID = req.params.id as string;
+    async getBadge(req: express.Request, res: express.Response) {
+    const badgeID = req.params.id;
 
-    if (!badgeID) {
-        return res.status(400).send({
-            error: "No badge id supplied"
+    if (typeof badgeID !== "string" || !badgeID) {
+        return res.status(400).json({
+            error: "Invalid or missing badge id"
         });
     }
 
-    const badge = await db.badges.findByPk(badgeID);
+    try {
+        const badge = await db.badges.findByPk(badgeID);
 
-    if (!badge) {
-        return res.status(404).send({
-            error: `Badge with this id does not exist: ${badgeID}`
+        if (!badge) {
+            return res.status(404).json({
+                error: `Badge not found with id: ${badgeID}`
+            });
+        }
+
+        return res.status(200).json(badge);
+    } catch (err) {
+        console.error("Error retrieving badge:", err);
+
+        return res.status(500).json({
+            error: "Failed to retrieve badge"
         });
     }
-
-    return res.status(200).json(badge);
-}, //user + badge will me done later, right now i need my badges to be gettable.
+},
      async modifyById(req: express.Request, res: express.Response) {
     if (!req.params.id) {
         return res.status(400).send({
