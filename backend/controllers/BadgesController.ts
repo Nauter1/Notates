@@ -4,6 +4,7 @@ import Utilities from "./Utilities.ts";
 import { v7 as uuidv7 } from "uuid";
 import { error } from "node:console";
 import { Badges } from "../models/Badges.ts"
+import { User } from "../models/User.ts"
 
 const BadgesController = {
      async create(req: express.Request, res: express.Response) {
@@ -17,8 +18,6 @@ const BadgesController = {
                 }
             )
         }
-
-
 
         const result = await db.badges.create({
             id: uuidv7(),
@@ -34,7 +33,6 @@ const BadgesController = {
         });
      },
 
-
      async getBadge(req: express.Request, res: express.Response) {
         let badgeID: string = req.params.id as string
         //console.log(badgeID)
@@ -47,9 +45,6 @@ const BadgesController = {
             )
             return null;
         }
-        return badge;
-     },
-     async getUser(req: express.Request, res: express.Response) {
         let userID: string = req.params.id as string
         //console.log(userID)
         const user = await db.users.findByPk(userID);
@@ -62,7 +57,7 @@ const BadgesController = {
             )
             return null;
         }
-        return user;
-    }
+        return badge;
+     }
 }
 export default BadgesController
