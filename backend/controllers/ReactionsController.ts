@@ -4,11 +4,13 @@ import Utilities from "./Utilities.ts";
 import { v7 as uuidv7 } from "uuid";
 import { Reaction } from "../models/Reaction.ts";
 
+
+
 const ReactionsController = {
     async createComment(req: express.Request, res: express.Response) {
         const { Content, PostID, UserID } = req.body;
 
-        if (!Content || !PostID || !UserID) {
+        if (!Content /*|| !PostID || !UserID*/) {
             return res.status(400).send({
                 error: "Missing parameters, please review data",
             });
@@ -17,8 +19,8 @@ const ReactionsController = {
         try {
             const createdReaction = await Reaction.create({
                 ReactionID: uuidv7(),
-                PostID,
-                UserID,
+                PostID: "00000000-0000-7000-8000-000000000001",//DEFAULT TO BE REMOVED
+                UserID: "00000000-0000-7000-8000-000000000002",//DEFAULT TO BE REMOVED
                 Content,
                 IsComment: true,
             });
@@ -38,7 +40,7 @@ const ReactionsController = {
         async createReaction(req: express.Request, res: express.Response) { //yes, this is different from createComment
         const { Content, PostID, UserID } = req.body;
 
-        if (!Content || !PostID || !UserID) {
+        if (!Content /*|| !PostID || !UserID*/) {
             return res.status(400).send({
                 error: "Missing parameters, please review data",
             });
@@ -47,8 +49,8 @@ const ReactionsController = {
         try {
             const createdReaction = await Reaction.create({
                 ReactionID: uuidv7(),
-                PostID,
-                UserID,
+                PostID: "00000000-0000-7000-8000-000000000003",//DEFAULT TO BE REMOVED
+                UserID: "00000000-0000-7000-8000-000000000004",//DEFAULT TO BE REMOVED
                 Content,
                 IsComment: false,
             });

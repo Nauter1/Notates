@@ -1,8 +1,8 @@
 import { Sequelize, DataTypes } from 'sequelize';
 
 // modelite pathid
-import PostModel from "../backend/models/Post.ts"
-import UserModel from "../backend/models/User.ts"
+import PostModel from "./models/Post.ts"
+import UserModel from "./models/User.ts"
 import UserPostsModel from './models/UserPosts.ts';
 import ReactionModel from "../backend/models/Reaction.ts";
 import BadgesModel from "../backend/models/Badges.ts";
