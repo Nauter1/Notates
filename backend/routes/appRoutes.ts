@@ -3,9 +3,9 @@ import ReactionsController from "../controllers/ReactionsController.ts";
 import PostsController from "../controllers/PostsController.ts";
 import { Badges } from "../models/Badges.ts";
 import BadgesController from "../controllers/BadgesController.ts";
+import checkRequestBody from "../controllers/middleware/checkRequestBody.ts";
 //import UserController from "../controllers/UserController.ts";
 //import userPostsController from "../controllers/UserPostsController.ts";
-import checkRequestBody from "../controllers/middleware/checkRequestBody.ts";
 
 export default (app: express.Express): void => {
     //reaktsioonid
@@ -13,10 +13,10 @@ export default (app: express.Express): void => {
         .get(ReactionsController.getAll)
 
     app.route("/reactions/comment")
-        .post(ReactionsController.createComment)
+        .post(checkRequestBody, ReactionsController.createComment)
 
     app.route("/reactions/reaction")
-        .post(ReactionsController.createReaction)
+        .post(checkRequestBody, ReactionsController.createReaction)
 
     // TODO: add these once the handlers exist in ReactionsController
     // app.route("/reactions/:id")
@@ -38,13 +38,13 @@ export default (app: express.Express): void => {
         .put(checkRequestBody, PostsController.modifyById)      // U pdate
 
     app.route("/badges")
-        .post(BadgesController.create)
+        .post(checkRequestBody, BadgesController.create)
         .get(BadgesController.getBadge)
 
     app.route("/badges/:id")
         .delete(BadgesController.deleteById)
         .get(BadgesController.getBadge)
-        .put(BadgesController.modifyById)
+        .put(checkRequestBody, BadgesController.modifyById)
 
 
     // userPosts
