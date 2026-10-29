@@ -58,50 +58,46 @@ const BadgesController = {
     }
 },
      async modifyById(req: express.Request, res: express.Response) {
-    if (!req.params.id) {
-        return res.status(400).send({
-            error: "No id supplied"
+    const badgeID = req.params.id;
+
+    if (typeof badgeID !== "string" || !badgeID) {
+        return res.status(400).json({
+            error: "Invalid or missing badge id"
         });
     }
 
-    const badgeToBeModified = await BadgesController.getBadge(req, res);
-
-    if (!badgeToBeModified) {
-        return;
-    }
-
-    if (
-        !req.body.Title ||
-        !req.body.Description
-    ) {
-        return res.status(400).send({
+    if (!req.body.Title || !req.body.Description) {
+        return res.status(400).json({
             error: "Missing parameters, please review data"
         });
     }
 
-    const modifiedBadge = {
-        Title: req.body.Title,
-        Description: req.body.Description,
-        DateObtained: req.body.DateObtained,
-        JoinDate: req.body.JoinDate,
-        postCount: req.body.postCount,
-        reactionCount: req.body.reactionCount,
-        updatedAt: new Date()
-    };
+    try {
+        const badge = await db.badges.findByPk(badgeID);
 
-    await db.badges.update(modifiedBadge, {
-        where: {
-            id: req.params.id
+        if (!badge) {
+            return res.status(404).json({
+                error: `Badge not found with id: ${badgeID}`
+            });
         }
-    });
 
-    return res
-        .location(`${Utilities.getBaseURL(req)}/badges/${req.params.id}`)
-        .status(200)
-        .send({
-            id: req.params.id,
-            ...modifiedBadge
+        await badge.update({
+            Title: req.body.Title,
+            Description: req.body.Description,
+            DateObtained: req.body.DateObtained,
+            JoinDate: req.body.JoinDate,
+            postCount: req.body.postCount,
+            reactionCount: req.body.reactionCount
         });
+
+        return res.status(200).json(badge);
+    } catch (err) {
+        console.error("Error updating badge:", err);
+
+        return res.status(500).json({
+            error: "Failed to update badge"
+        });
+    }
 },
      async deleteById(req: express.Request, res: express.Response) {
     const badgeID = req.params.id as string;
