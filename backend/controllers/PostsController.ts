@@ -7,43 +7,14 @@ import { Post } from "../models/Post.ts";
 
 const PostsController = {
     async create(req: express.Request, res: express.Response)  {
-        if (
-            !req.body.PostTitle
-        ) {
-            return res.status(400).send(
-                {
-                    error: "Missing parameter: PostTitle"
-                }
-            )
-        }
-        if (
-            !req.body.PostDescription
-        ) {
-            return res.status(400).send(
-                {
-                    error: "Missing parameter: PostDescription"
-                }
-            )
-        }
-        if (
-            !req.body.ReleaseDate
-        ) {
-            return res.status(400).send(
-                {
-                    error: "Missing parameter: ReleaseDate"
-                }
-            )
-        }
-        if (
-            !req.body.ContentLink
-        ) {
-            return res.status(400).send(
-                {
-                    error: "Missing parameter: ContentLink"
-                }
-            )
-        }
-            
+        const requiredFields = ["PostTitle","PostDescription","ReleaseDate","ContentLink"]
+        const missingFields = requiredFields.filter(field => !req.body[field]);
+        if (missingFields.length > 0){
+            return res.status(400).send({
+                error: "Missing Params, please check these over.",
+                missing: missingFields
+            })
+        }   
         const newPost = {
             id: uuidv7(),
             PostTitle: req.body.PostTitle,
