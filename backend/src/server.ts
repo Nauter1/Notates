@@ -1,4 +1,5 @@
 import express, { type Request, type Response, type NextFunction } from "express"
+import { v7 as uuidv7 } from "uuid";
 
 const app = express()
 app.use(express.json())
@@ -6,9 +7,9 @@ const PORT = process.env.PORT || 3000
 
 var postId = 0; 
 const posts = [
-    { id: postId++, PostTitle: "String Theory", ContentLink: "FilePath1", PostDescription: "Here is my song!", ReleaseDate: "01/01/2001"},
-    { id: postId++, PostTitle: "Never Gonna Give you up", ContentLink: "FilePath2", PostDescription: "Gotem!", ReleaseDate: "01/01/2001"},
-    { id: postId++, PostTitle: "Meridian", ContentLink: "FilePath3", PostDescription: "Song time!", ReleaseDate: "01/01/2001"},
+    { id: "01a18688-50ca-7fb9-917a-bb681b9dee49", PostTitle: "String Theory", ContentLink: "FilePath1", PostDescription: "Here is my song!", ReleaseDate: "01/01/2001"},
+    { id: "01a18688-50ca-7fb9-917a-bb681b9dee49", PostTitle: "Never Gonna Give you up", ContentLink: "FilePath2", PostDescription: "Gotem!", ReleaseDate: "01/01/2001"},
+    { id: "01a18688-50ca-7fb9-917a-bb681b9dee49", PostTitle: "Meridian", ContentLink: "FilePath3", PostDescription: "Song time!", ReleaseDate: "01/01/2001"},
 ]
 
 const reactions = [
@@ -87,7 +88,7 @@ app.get("/posts", (req: express.Request, res: express.Response) => {
     res.send(result)
 })
 
-app.get("/posts/:id", (req: express.Request, res: express.Response) => {
+/*app.get("/posts/:id", (req: express.Request, res: express.Response) => {
     if (!req.params.id){
         res.status(400).send({error: "No id given."});
         return
@@ -98,7 +99,23 @@ app.get("/posts/:id", (req: express.Request, res: express.Response) => {
         res.status(404).send({error: "post not found"});
         return
     } 
-})
+})*/
+
+app.get("/posts/:id", (req: express.Request, res: express.Response) => {
+    if (!req.params.id){
+        res.status(400).send({error: "No id given."});
+        return
+    }
+    const postId = req.params.id;
+    const result = posts.find(post => post.id === postId);
+
+    if (result === undefined) {
+        res.status(404).send({ error: "Post not found." });
+        return;
+    }
+
+    res.status(200).send(result);
+});
 
 app.post('/posts' ,(req: express.Request, res: express.Response)=> {
     const title = req.body.title
@@ -118,7 +135,7 @@ app.post('/posts' ,(req: express.Request, res: express.Response)=> {
         return
     }
     let newPost = {
-        id: postId++,
+        id: uuidv7(),
         PostTitle: title,
         ContentLink: content,
         PostDescription: description,
