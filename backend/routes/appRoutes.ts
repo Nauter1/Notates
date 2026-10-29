@@ -39,13 +39,13 @@ export default (app: express.Express): void => {
         .put(checkRequestBody, PostsController.modifyById)      // U pdate
 
     app.route("/badges")
-        .post(BadgesController.create)
+        .post(checkRequestBody, BadgesController.create)
         .get(BadgesController.getBadge)
 
     app.route("/badges/:id")
         .delete(BadgesController.deleteById)
         .get(BadgesController.getBadge)
-        .put(BadgesController.modifyById)
+        .put(checkRequestBody, BadgesController.modifyById)
 
 
     // userPosts
