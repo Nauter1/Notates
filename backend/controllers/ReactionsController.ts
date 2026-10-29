@@ -121,6 +121,34 @@ async getAll(req: express.Request, res: express.Response) {
     await reactionToBeDeleted.destroy();
 
     return res.status(204).send();
+},
+
+    async getById(req: express.Request, res: express.Response) {
+    const ReactionID = req.params.id;
+
+    if (typeof ReactionID !== "string" || !ReactionID) {
+        return res.status(400).json({
+            error: "Invalid or missing ReactionID"
+        });
+    }
+
+    try {
+        const reaction = await Reaction.findByPk(ReactionID);
+
+        if (!reaction) {
+            return res.status(404).json({
+                error: `Reaction not found with id: ${ReactionID}`
+            });
+        }
+
+        return res.status(200).json(reaction);
+    } catch (err) {
+        console.error("Error retrieving reaction:", err);
+
+        return res.status(500).json({
+            error: "Failed to retrieve reaction"
+        });
+    }
 }
 };
 
