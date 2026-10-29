@@ -1,10 +1,10 @@
 import { Sequelize, DataTypes } from 'sequelize';
 
 // modelite pathid
-import PostModel from "../backend/models/Post.ts"
-import UserModel from "../backend/models/User.ts"
+import PostModel from "./models/Post.ts"
+import UserModel from "./models/User.ts"
 import UserPostsModel from './models/UserPosts.ts';
-import ReactionModel from "../backend/models/Reaction.ts"
+import ReactionModel from "./models/Reaction.ts"
 
 //sequelizei andmebaasi ühendusandmed 
 const sequelize = new Sequelize(
@@ -32,6 +32,7 @@ const connect = async (): Promise<void> => {
 const _Post = PostModel(sequelize)
 const _User = UserModel(sequelize)
 const _UserPosts = UserPostsModel(sequelize)
+const _Reaction = ReactionModel(sequelize)
 //andmebaasi instants ja seostused
 _User.hasMany(_UserPosts,{foreignKey: "UserId" as "UserPosts"})
 _UserPosts.belongsTo(_User ,{foreignKey: "UserId" as "User"})
@@ -40,7 +41,8 @@ const db = {
     sequelize,
     posts: _Post,
     users: _User,
-    userPosts: _UserPosts
+    userPosts: _UserPosts,
+    reactions: _Reaction
 };
 // db.games.belongsToMany(db.users, {through: db.userCollections, as: "UserId"})
 // db.users.belongsTo(db.games, {through: db.userCollections, as: "GameId"})
