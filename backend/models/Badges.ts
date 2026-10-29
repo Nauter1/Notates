@@ -1,4 +1,4 @@
-import { DataTypes, Model, UUIDV4 } from "sequelize";
+import { DataTypes, Model } from "sequelize";
 import type { InferAttributes, InferCreationAttributes, CreationOptional, Sequelize } from "sequelize";
 import type { Json } from "sequelize/lib/utils";
 
