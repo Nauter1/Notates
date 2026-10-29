@@ -15,8 +15,7 @@ function isPng(value: string): boolean {
 }
 
 export class Reaction extends Model<InferAttributes<Reaction>, InferCreationAttributes<Reaction>> {
-    //musthave
-    declare ReactionID: UUID;
+    declare ReactionID: string;
     declare PostID: string;
     declare UserID: string;
     declare IsComment: boolean;
