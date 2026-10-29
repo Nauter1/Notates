@@ -96,15 +96,26 @@ const BadgesController = {
         });
 },
      async deleteById(req: express.Request, res: express.Response) {
-             const badgeToBeDeleted = await BadgesController.getBadge(req, res)
-             if (!badgeToBeDeleted) {
-                 return            
-             }
-             await badgeToBeDeleted.destroy();
-             return res.status(204).send({error :"No Content"})
-         },
+    const badgeID = req.params.id as string;
 
-    
+    if (!badgeID) {
+        return res.status(400).send({
+            error: "No badge id supplied"
+        });
+    }
+
+    const badgeToBeDeleted = await db.badges.findByPk(badgeID);
+
+    if (!badgeToBeDeleted) {
+        return res.status(404).send({
+            error: `Badge with this id does not exist: ${badgeID}`
+        });
+    }
+
+    await badgeToBeDeleted.destroy();
+
+    return res.status(204).send();
+}
 
          
 }
