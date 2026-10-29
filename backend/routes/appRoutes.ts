@@ -3,6 +3,7 @@ import ReactionsController from "../controllers/ReactionsController.ts";
 import PostsController from "../controllers/PostsController.ts";
 import { Badges } from "../models/Badges.ts";
 import BadgesController from "../controllers/BadgesController.ts";
+import checkRequestBody from "../controllers/middleware/checkRequestBody.ts";
 //import UserController from "../controllers/UserController.ts";
 //import userPostsController from "../controllers/UserPostsController.ts";
 
@@ -12,10 +13,10 @@ export default (app: express.Express): void => {
         .get(ReactionsController.getAll)
 
     app.route("/reactions/comment")
-        .post(ReactionsController.createComment)
+        .post(checkRequestBody, ReactionsController.createComment)
 
     app.route("/reactions/reaction")
-        .post(ReactionsController.createReaction)
+        .post(checkRequestBody, ReactionsController.createReaction)
 
     // TODO: add these once the handlers exist in ReactionsController
     // app.route("/reactions/:id")
