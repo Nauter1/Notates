@@ -127,9 +127,10 @@ const PostsController = {
                 }
             )
         }
+        const idString = req.params.id.toString();
         const modifiedPost = {
 
-            id: uuidv7(),
+            id: idString,
             PostTitle: req.body.PostTitle,
             PostDescription: req.body.PostDescription,
             ReleaseDate: req.body.ReleaseDate,
@@ -162,9 +163,9 @@ const PostsController = {
         console.log(postID)
         const post = await db.posts.findByPk(postID);
         if (!post) {
-            console.log("Game not found")
+            console.log("Post not found")
             res.status(404).send({
-                error: `Game with this ID is not found. ${postID}`
+                error: `Post with this ID is not found. ${postID}`
             })
             return null;
         }
