@@ -101,6 +101,27 @@ async getAll(req: express.Request, res: express.Response) {
         return res.status(500).send({ error: "Internal server error" });
     }
 },
+     async deleteById(req: express.Request, res: express.Response) {
+    const ReactionID = req.params.id as string;
+
+    if (!ReactionID) {
+        return res.status(400).send({
+            error: "No reaction id supplied"
+        });
+    }
+
+    const reactionToBeDeleted = await Reaction.findByPk(ReactionID);
+
+    if (!reactionToBeDeleted) {
+        return res.status(404).send({
+            error: `Reaction with this id does not exist: ${ReactionID}`
+        });
+    }
+
+    await reactionToBeDeleted.destroy();
+
+    return res.status(204).send();
+}
 };
 
 export default ReactionsController;
