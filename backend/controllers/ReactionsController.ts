@@ -1,11 +1,11 @@
-import type { Request, Response } from "express";
+import * as express from "express";
 import { ValidationError } from "sequelize";
 import Utilities from "./Utilities.ts";
 import { v7 as uuidv7 } from "uuid";
 import { Reaction } from "../models/Reaction.ts";
 
 const ReactionsController = {
-    async createComment(req: Request, res: Response) {
+    async createComment(req: express.Request, res: express.Response) {
         const { Content, PostID, UserID } = req.body;
 
         if (!Content || !PostID || !UserID) {
@@ -35,7 +35,7 @@ const ReactionsController = {
         }
     },
 
-        async createReaction(req: Request, res: Response) { //yes, this is different from createComment
+        async createReaction(req: express.Request, res: express.Response) { //yes, this is different from createComment
         const { Content, PostID, UserID } = req.body;
 
         if (!Content || !PostID || !UserID) {
@@ -64,6 +64,41 @@ const ReactionsController = {
             return res.status(500).send({ error: "Internal server error" });
         }
     },
+
+async getAll(req: express.Request, res: express.Response) {
+    try {
+        const reactions = await Reaction.findAll({
+            order: [["createdAt", "DESC"]],
+        });
+
+        return res.status(200).send(
+            reactions.map(
+                ({
+                    ReactionID,
+                    PostID,
+                    UserID,
+                    IsComment,
+                    IsCustomReaction,
+                    ReactionSourceID,
+                    Content,
+                    createdAt,
+                }) => ({
+                    ReactionID,
+                    PostID,
+                    UserID,
+                    IsComment,
+                    IsCustomReaction,
+                    ReactionSourceID,
+                    Content,
+                    createdAt,
+                })
+            )
+        );
+    } catch (err) {
+        console.error(err);
+        return res.status(500).send({ error: "Internal server error" });
+    }
+},
 };
 
 export default ReactionsController;
