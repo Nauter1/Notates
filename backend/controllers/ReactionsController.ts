@@ -24,7 +24,37 @@ const ReactionsController = {
             });
 
             return res
-                .location(`${Utilities.getBaseURL(req)}/reactions/${createdReaction.ReactionID}`)
+                .location(`${Utilities.getBaseURL(req)}/reactions/comment/${createdReaction.ReactionID}`)
+                .sendStatus(201);
+        } catch (err) {
+            if (err instanceof ValidationError) {
+                return res.status(400).send({ error: err.message });
+            }
+            console.error(err);
+            return res.status(500).send({ error: "Internal server error" });
+        }
+    },
+
+        async createReaction(req: Request, res: Response) { //yes, this is different from createComment
+        const { Content, PostID, UserID } = req.body;
+
+        if (!Content || !PostID || !UserID) {
+            return res.status(400).send({
+                error: "Missing parameters, please review data",
+            });
+        }
+
+        try {
+            const createdReaction = await Reaction.create({
+                ReactionID: uuidv7(),
+                PostID,
+                UserID,
+                Content,
+                IsComment: false,
+            });
+
+            return res
+                .location(`${Utilities.getBaseURL(req)}/reactions/reaction/${createdReaction.ReactionID}`)
                 .sendStatus(201);
         } catch (err) {
             if (err instanceof ValidationError) {
