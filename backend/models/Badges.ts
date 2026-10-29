@@ -8,13 +8,15 @@ export class Badges extends Model<InferAttributes<Badges>,InferCreationAttribute
     declare Title: string;
     declare Description: string;
     declare DateObtained: Date;
+    declare JoinDate: Date;
+    declare isAdmin: boolean;
+    declare postCount: Number;
+    declare isPlusMember: boolean;
+    declare reactionCount: Number;
+    declare isVerifiedArtist: boolean;
 
-    //canhave
+    //important
     declare id: CreationOptional<string>
-     /*declare ImageURL: CreationOptional<string | null>
-    declare IsOwnedBy: CreationOptional<number>
-    declare Reviews: CreationOptional<Json | null>
-    declare Comments: CreationOptional<Json | null>*/
 
     //dbhave
     declare createdAt: CreationOptional<Date>;
@@ -39,7 +41,26 @@ export default function initBadgesModel(sequelize: Sequelize)
                 allowNull: true
             },
             DateObtained: {
-                type: DataTypes.DATE
+                type: DataTypes.DATE,
+            },
+            JoinDate: {
+                type: DataTypes.DATE,
+            },
+            isAdmin: {
+                type: DataTypes.BOOLEAN,
+            },
+            postCount: {
+                type: DataTypes.INTEGER,
+                //reference some other value? or keep this
+            },
+            isPlusMember: {
+                type: DataTypes.NUMBER,
+            },
+            reactionCount: {
+                type: DataTypes.NUMBER,
+            },
+            isVerifiedArtist: {
+                type: DataTypes.BOOLEAN,
             },
             createdAt: DataTypes.DATE,
             updatedAt: DataTypes.DATE,
@@ -52,3 +73,13 @@ export default function initBadgesModel(sequelize: Sequelize)
     return Badges;
 }
 
+// const badges = [
+
+//     { id: 1, name: "JoinDate", value: Date}, ye
+//     { id: 2, name: "isAdmin", value: Boolean}, ye
+//     { id: 3, name: "postCount", value: Number}, ye
+//     { id: 4, name: "isPlusMember", value: Boolean}, ye
+//     { id: 5, name: "reactionCount", value: Number}, ye
+//     { id: 6, name: "isVerifiedArtist", value: Boolean} ye
+
+// ]
