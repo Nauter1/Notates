@@ -9,7 +9,7 @@ InferCreationAttributes<UserBadges>> {
     declare DateObtained: CreationOptional<Date>
 
     //canhave
-    declare id: CreationOptional<string | null>
+    declare id: CreationOptional<string>
 
     //dbhave
     declare createdAt: CreationOptional<Date>;
