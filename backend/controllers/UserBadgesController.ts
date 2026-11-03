@@ -68,6 +68,44 @@ const UserBadgesController = {
                 error: "Failed to assign badge"
             });
         }
+    },
+    async deleteByUserAndBadge(req: Request, res: Response) {
+        const userId = req.params.userId;
+        const badgeId = req.params.badgeId;
+
+        if (
+            typeof userId !== "string" ||
+            typeof badgeId !== "string" ||
+            !isUuid(userId) ||
+            !isUuid(badgeId)
+        ) {
+            return res.status(400).json({
+                error: "UserId and BadgeId must be valid UUIDs"
+            });
+        }
+
+        try {
+            const deletedCount = await db.userBadges.destroy({
+                where: {
+                    UserId: userId,
+                    BadgeId: badgeId
+                }
+            });
+
+            if (deletedCount === 0) {
+                return res.status(404).json({
+                    error: "Badge assignment not found"
+                });
+            }
+
+            return res.status(204).send();
+        } catch (err) {
+            console.error("Error removing badge assignment:", err);
+
+            return res.status(500).json({
+                error: "Failed to remove badge assignment"
+            });
+        }
     }
 };
 
