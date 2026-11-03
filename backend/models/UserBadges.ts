@@ -5,7 +5,7 @@ import type { Json } from "sequelize/lib/utils";
 export class UserBadges extends Model<InferAttributes<UserBadges>,
 InferCreationAttributes<UserBadges>> {
     //musthave
-    declare BadgeIDs: Json
+    declare BadgeId: string
     declare UserId: string
     declare DateObtained: CreationOptional<Date>
 
@@ -28,8 +28,8 @@ export default function initUserBadgesModel(
                 primaryKey: true
             },
             // võõrvõtmed
-            BadgeIDs: {
-                type: DataTypes.JSON,
+            BadgeId: {
+                type: DataTypes.UUID,
                 allowNull: false
             },
             UserId: {
@@ -47,6 +47,12 @@ export default function initUserBadgesModel(
         {
             sequelize,
             modelName: "UserBadges",
+            indexes: [
+                {
+                    unique: true,
+                    fields: ["UserId", "BadgeId"]
+                }
+            ]
         }
     )
     
