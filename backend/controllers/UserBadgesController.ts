@@ -54,6 +54,21 @@ const UserBadgesController = {
                     error: "User already has this badge"
                 });
             }
+
+            // handles an user/badge deleted between lookup and insert
+            if (err instanceof ForeignKeyConstraintError) {
+                return res.status(404).json({
+                    error: "User or badge no longer exists"
+                });
+            }
+
+            console.error("Error assigning badge: ", err);
+
+            return res.status(500).json({
+                error: "Failed to assign badge"
+            });
         }
     }
-}
+};
+
+export default UserBadgesController;
