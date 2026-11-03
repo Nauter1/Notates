@@ -23,5 +23,37 @@ const UserBadgesController = {
                 error: "UserId and BadgeId must be valid UUIDs"
             });
         }
+
+        try {
+            const user = await db.users.findByPk(userId);
+
+            if (!user) {
+                return res.status(404).json({
+                    error: "User not found"
+                });
+            }
+
+            const badge = await db.badges.findByPk(badgeId);
+
+            if (!badge) {
+                return res.status(404).json({
+                    error: "Badge not found"
+                });
+            }
+            // the model supplies the id and award date
+            const assignment = await db.userBadges.create({
+                UserId: userId,
+                BadgeId: badgeId
+            });
+
+            return res.status(201).json(assignment);
+        } catch (err) {
+            // the combined unique index rejects duplicate awards
+            if (err instanceof UniqueConstraintError) {
+                return res.status(409).json({
+                    error: "User already has this badge"
+                });
+            }
+        }
     }
 }
