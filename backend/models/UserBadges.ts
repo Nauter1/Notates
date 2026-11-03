@@ -7,6 +7,7 @@ InferCreationAttributes<UserBadges>> {
     //musthave
     declare BadgeIDs: Json
     declare UserId: string
+    declare DateObtained: CreationOptional<Date>
 
     //canhave
     declare id: CreationOptional<string | null>
@@ -34,6 +35,11 @@ export default function initUserBadgesModel(
             UserId: {
                 type: DataTypes.UUID,
                 allowNull: false
+            },
+            DateObtained: {
+                type: DataTypes.DATE,
+                allowNull: false,
+                defaultValue: DataTypes.NOW
             },
             createdAt: DataTypes.DATE,
             updatedAt: DataTypes.DATE,
