@@ -55,7 +55,8 @@ export default (app: express.Express): void => {
 
     app.route("/users/:userId/badges")
         .post(checkRequestBody, UserBadgesController.create);
-
+    app.route("/users/:userId/badges/:badgeId")
+        .delete(UserBadgesController.deleteByUserAndBadge);
 
     // userPosts
 
