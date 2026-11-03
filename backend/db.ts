@@ -6,6 +6,7 @@ import UserModel from "./models/User.ts";
 import UserPostsModel from "./models/UserPosts.ts";
 import ReactionModel from "./models/Reaction.ts";   // path fixed
 import BadgesModel from "./models/Badges.ts";       // path fixed
+import UserBadgesModel from "./models/UserBadges.ts"
 
 //sequelizei andmebaasi ühendusandmed
 const sequelize = new Sequelize(
@@ -35,10 +36,17 @@ const _User = UserModel(sequelize);
 const _UserPosts = UserPostsModel(sequelize);
 const _Badges = BadgesModel(sequelize);
 const _Reaction = ReactionModel(sequelize);         // THIS WAS MISSING
+const _UserBadges = UserBadgesModel(sequelize);
 
 //andmebaasi instants ja seostused
 _User.hasMany(_UserPosts, { foreignKey: "UserId" });
 _UserPosts.belongsTo(_User, { foreignKey: "UserId" });
+
+_User.hasMany(_UserBadges, { foreignKey: "UserId" });
+_UserBadges.belongsTo(_User, { foreignKey: "UserId" });
+
+_Badges.hasMany(_UserBadges, { foreignKey: "BadgeId" });
+_UserBadges.belongsTo(_Badges, { foreignKey: "BadgeId" });
 
 const db = {
     Sequelize,
@@ -48,6 +56,7 @@ const db = {
     userPosts: _UserPosts,
     badges: _Badges,
     reactions: _Reaction,                           // added
+    userBadges: _UserBadges,
 };
 
 //sünkroonmeetod
