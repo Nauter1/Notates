@@ -122,7 +122,9 @@ const BadgesController = {
 },
 async getAll(req: express.Request, res: express.Response) {
     try {
-        const badges = await db.badges.findAll();
+        const badges = await db.badges.findAll({
+            attributes: ["id", "Title"]
+        });
         return res.status(200).json(badges);
     } catch (err) {
         console.error("Error retrieving badges:", err);
