@@ -1,0 +1,30 @@
+{
+    "openapi":"3.0.3",
+    "info":{
+        "title":"Notates API",
+        "version":"1.0.0",
+        "description":"projekt projekt"
+    },
+    "paths":{
+        "/posts":{
+            "get":{
+                "summary":"Päri loetelu postitustest",
+                "responses":{
+                    "200":{
+                        "description":"Õnnestunud päring",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type":"object",
+                                    "properties":{
+                                        
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
