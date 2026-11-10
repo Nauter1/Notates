@@ -1,25 +1,25 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState, useEffect } from 'react';
+import { OpenAPIEditor } from '@apitomy/openapi-editor';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+    const [content, setContent] = useState(null);
 
-export default App;
+    useEffect(() => {
+        fetch('/api/openapi.json')
+            .then(res => res.text())
+            .then(data => setContent(data));
+    }, []);
+    const handleChange = (event) => {
+      console.log(event.getContent());
+    }
+
+    if (!content) return <div>Loading...</div>;
+
+    return (
+        <OpenAPIEditor
+            initialContent={content}
+            onChange={setContent}
+        />
+    );
+}
+export default App

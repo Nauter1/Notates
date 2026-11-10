@@ -14,6 +14,11 @@ const app = express();
 
 app.use(cors())
 app.use(express.json())
+
+app.use("/docs/openapi.json", (req, res)=>{
+    res.json(swaggerDoc)
+})
+
 app.use("/docs",swaggerUI.serve,swaggerUI.setup(swaggerDoc))
 appRoutes(app);
 //TODO: installi swaggerile vajalikud paketid
