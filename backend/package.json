@@ -1,6 +1,9 @@
 {
   "name": "backend",
   "type": "module",
+  "imports":{
+    "./*":"./src/*"
+  },
   "version": "1.0.0",
   "main": "server.ts",
   "scripts": {

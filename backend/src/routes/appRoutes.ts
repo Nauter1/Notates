@@ -5,8 +5,8 @@ import { Badges } from "../models/Badges.ts";
 import BadgesController from "../controllers/BadgesController.ts";
 import checkRequestBody from "../controllers/middleware/checkRequestBody.ts";
 import UserBadgesController from "../controllers/UserBadgesController.ts";
-//import UserController from "../controllers/UserController.ts";
-//import userPostsController from "../controllers/UserPostsController.ts";
+import UserController from "../controllers/UserController.ts";
+import userPostsController from "../controllers/UserPostsController.ts";
 
 
 export default (app: express.Express): void => {
