@@ -16,6 +16,7 @@ const mocks = vi.hoisted(()=>({
     findAll: vi.fn(),
     findByPk: vi.fn(),
     create: vi.fn(),
+    update: vi.fn()
 }))
 
 vi.mock("../../db.ts", () => ({
@@ -23,7 +24,8 @@ vi.mock("../../db.ts", () => ({
         posts: {
             findAll: mocks.findAll,
             findByPk: mocks.findByPk,
-            create: mocks.create
+            create: mocks.create,
+            update: mocks.update
         }
     }
 }));
@@ -117,5 +119,54 @@ describe("PostsController", () => {
         expect(mocks.create).toHaveBeenCalledOnce()
         expect(res.location).toHaveBeenCalledWith(`http://localhost:8080/posts/${id}`)
         expect(res.sendStatus).toHaveBeenCalledWith(201)
+    })
+
+    test("ReturnModifiedGameById_With201Status", async()=>{
+        mocks.findByPk.mockResolvedValue({id:
+            "7bef1e04-e5a2-4671-bff4-51588445b176"
+        })
+        const post = {
+            id:	"7bef1e04-e5a2-4671-bff4-51588445b176",
+            PostTitle: "Galaxies",
+            ContentLink: "Ababa",
+            PostDescription: "Ababa",
+            ReleaseDate: "2000-12-31T22:00:00.000Z",
+            createdAt: "2026-10-29T08:35:36.000Z",
+            updatedAt: "2026-10-29T10:11:12.000Z"
+        }
+        const req ={
+            id: "7bef1e04-e5a2-4671-bff4-51588445b176",
+            PostTitle: "Galaxies",
+            ContentLink:"Ababa",
+            PostDescription:"Ababa",
+            ReleaseDate:new Date(),
+            createdAt:new Date(),
+            updatedAt:new Date()
+        } as unknown as Request
+        const res= {
+            location: vi.fn().mockReturnThis(),
+            status: vi.fn().mockReturnThis(),
+            send: vi.fn().mockReturnThis()
+        } as unknown as Response
+
+
+        await _PostsController.modifyById(req,res)
+
+        expect(mocks.findByPk).toHaveBeenCalledWith(post.id)
+        expect(mocks.update).toHaveBeenCalledOnce()
+        expect(mocks.update).toHaveBeenCalledWith(
+            expect.objectContaining({
+                PostTitle: "Galaxies",
+                ContentLink:"Ababa",
+                PostDescription:"Ababa",
+                ReleaseDate:new Date(),
+                createdAt:new Date(),
+                updatedAt:new Date()
+            }),
+            {where:{
+                id: post.id
+            }}
+        )
+        expect(res.status).toHaveBeenCalledWith(201)
     })
 });
