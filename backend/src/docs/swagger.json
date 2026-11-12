@@ -5,6 +5,11 @@
     "description": "projekt projekt",
     "version": "1.0.0"
   },
+  "servers": [
+    {
+      "url": "https://petstore3.swagger.io/api/v3"
+    }
+  ],
   "paths": {
     "/posts": {
       "summary": "Get a list of all posts",
@@ -104,39 +109,7 @@
           }
         }
       }
-    }
-  },
-  "components": {
-    "schemas": {
-      "PostListItem": {
-        "title": "Post List Item",
-        "description": "{\n\"PostTitle\": \"Universes\",\n\"ContentLink\": \"Ababa\",\n\"PostDescription\": \"Ababa\",\n\"ReleaseDate\": \"01/01/2001\"\n}",
-        "type": "object"
-      }
-    }
-  }
-}
-
-{
-  "openapi": "3.0.3",
-  "info": {
-    "title": "Swagger Petstore - OpenAPI 3.0",
-    "description": "This is a sample Pet Store Server based on the OpenAPI 3.0 specification.",
-    "contact": {
-      "email": "apiteam@swagger.io"
     },
-    "license": {
-      "name": "Apache 2.0",
-      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
-    },
-    "version": "1.0.0"
-  },
-  "servers": [
-    {
-      "url": "https://petstore3.swagger.io/api/v3"
-    }
-  ],
-  "paths": {
     "/reactions": {
       "summary": "Get a reaction",
       "description": "Get a reaction",
@@ -218,6 +191,11 @@
   },
   "components": {
     "schemas": {
+      "PostListItem": {
+        "title": "Post List Item",
+        "description": "{\n\"PostTitle\": \"Universes\",\n\"ContentLink\": \"Ababa\",\n\"PostDescription\": \"Ababa\",\n\"ReleaseDate\": \"01/01/2001\"\n}",
+        "type": "object"
+      },
       "Pet": {
         "required": [
           "name",
