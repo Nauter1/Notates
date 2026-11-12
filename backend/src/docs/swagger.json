@@ -1,30 +1,118 @@
 {
-    "openapi":"3.0.3",
-    "info":{
-        "title":"Notates API",
-        "version":"1.0.0",
-        "description":"projekt projekt"
-    },
-    "paths":{
-        "/posts":{
-            "get":{
-                "summary":"Päri loetelu postitustest",
-                "responses":{
-                    "200":{
-                        "description":"Õnnestunud päring",
-                        "content":{
-                            "application/json":{
-                                "schema":{
-                                    "type":"object",
-                                    "properties":{
-                                        
-                                    }
-                                }
-                            }
-                        }
-                    }
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Notates API",
+    "description": "projekt projekt",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/posts": {
+      "summary": "Get a list of all posts",
+      "description": "Returns a list of all games in api",
+      "get": {
+        "summary": "Get list of all games",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
                 }
+              }
             }
+          }
         }
+      },
+      "post": {
+        "summary": "Post Create method",
+        "description": "Post Create method for creating posts",
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/posts/{id}": {
+      "get": {
+        "summary": "Get post by specific ID",
+        "description": "Get a detailed post with a specific ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id of selected post",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "put": {
+        "summary": "Modify post with specified ID",
+        "description": "Modify a post with specified ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id of selected post",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete post with specified ID",
+        "description": "Destroy a post with specified id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id of selected post",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        }
+      }
     }
+  },
+  "components": {
+    "schemas": {
+      "PostListItem": {
+        "title": "Post List Item",
+        "description": "{\n\"PostTitle\": \"Universes\",\n\"ContentLink\": \"Ababa\",\n\"PostDescription\": \"Ababa\",\n\"ReleaseDate\": \"01/01/2001\"\n}",
+        "type": "object"
+      }
+    }
+  }
 }
