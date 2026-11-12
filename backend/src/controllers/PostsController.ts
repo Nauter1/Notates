@@ -7,6 +7,7 @@ import { Post } from "../models/Post.ts";
 
 const PostsController = {
     async create(req: express.Request, res: express.Response)  {
+        // #swagger.tags = ['Games']
         const requiredFields = ["PostTitle","PostDescription","ReleaseDate","ContentLink"]
         const missingFields = requiredFields.filter(field => !req.body[field]);
         if (missingFields.length > 0){
@@ -28,6 +29,7 @@ const PostsController = {
         .location(`${Utilities.getBaseURL(req)}/posts/${createdPost.id}`).sendStatus(201);
     },
     async getAll(req: express.Request, res: express.Response) {
+        // #swagger.tags = ['Games']
         const posts = await db.posts.findAll();
         console.log("getAll: "+posts)
         return res
@@ -40,7 +42,7 @@ const PostsController = {
         )
     },
     async getByID(req: express.Request, res: express.Response) {
-        
+        // #swagger.tags = ['Games']
         const post = await PostsController.getPost(req, res)
         if (!post) {
             console.log("no post")
@@ -50,6 +52,7 @@ const PostsController = {
         return res.status(200).send(post);
     },
     async modifyById(req: express.Request, res: express.Response) {
+        // #swagger.tags = ['Games']
         if (!req.params.id) 
             {
                 console.log(req.params.id)
@@ -120,6 +123,7 @@ const PostsController = {
         .send(modifiedPost)
     },
     async deleteById(req: express.Request, res: express.Response) {
+        // #swagger.tags = ['Games']
         const postToBeDeleted = await PostsController.getPost(req, res)
         if (!postToBeDeleted) {
             return;
