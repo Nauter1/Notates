@@ -1,0 +1,25 @@
+{
+  "name": "notates",
+  "version": "1.0.0",
+  "description": "Notates text\r # Tegijad\r - Kaur Pakaste\r - Enrique Federico Niit\r - Marten Kaja",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "concurrently \"cd backend && nodemon .\" \"cd frontend && npm run dev",
+    "devstart": "concurrently \"cd backend && npm run dev\" \"cd frontend && npm run dev"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Nauter1/Notates.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Nauter1/Notates/issues"
+  },
+  "homepage": "https://github.com/Nauter1/Notates#readme",
+  "dependencies": {
+    "concurrently": "^10.0.7"
+  }
+}

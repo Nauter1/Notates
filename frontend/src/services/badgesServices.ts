@@ -1,4 +1,4 @@
-import type { Badge, BadgeSummary, BadgeInput } from "../types/Badges.ts"
+import type { Badge, BadgeSummary, BadgeInput } from "../types/Badges"
 const API_URL = import.meta.env.VITE_BACKEND_URL
 
 async function request<T>(endpoint: string, options?: RequestInit): Promise<T> {
@@ -17,7 +17,7 @@ async function request<T>(endpoint: string, options?: RequestInit): Promise<T> {
 
 /* service */
 
-export const gamesServices = {
+export const badgesServices = {
     getAll(): Promise<BadgeSummary[]> {
        return request<BadgeSummary[]>("/badges") 
     },
