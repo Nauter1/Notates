@@ -61,4 +61,15 @@ export default (app: express.Express): void => {
     // userPosts
 
     //app.route("/userposts").get(userPostsController.getAll).post(userPostsController.create)
+
+
+    // Users
+
+    app.route("/users")
+    .get(UserController.getAll)
+    .post(checkRequestBody, UserController.create)
+    app.route("/users/:id")
+    .get(UserController.getById)
+    .put(checkRequestBody, UserController.modifyById)
+    .delete(UserController.deleteById)
 }
