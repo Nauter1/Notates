@@ -6,6 +6,9 @@
     const badges = ref<BadgeSummary[]>([])
     const loading = ref(false)
     const error = ref("")
+    const emit = defineEmits<{
+        select: [id: string]
+    }>()
 
 async function loadBadges(){
     loading.value = true
@@ -35,7 +38,7 @@ onMounted(loadBadges)
         <p v-else-if="badges.length === 0">No badges found</p>
         <ul v-else>
             <li v-for="badge in badges" :key="badge.id">
-                {{ badge.Title }} ( {{ badge.id }})
+                <button @click="emit('select', badge.id)">{{ badge.Title }}</button> ( {{ badge.id }})
             </li>
         </ul>
     </section>
