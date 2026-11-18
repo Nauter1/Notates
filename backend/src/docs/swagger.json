@@ -114,6 +114,248 @@
           }
         }
       }
+    },
+    "/badges": {
+      "get": {
+        "summary": "Get list of all badges",
+        "description": "Returns the id and Title of every badge",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BadgeListItem"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "error": "Failed to retrieve badges"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a badge",
+        "description": "Creates a new badge. Title and Description are required. isAdmin, isPlusMember and isVerifiedArtist are always set to false on creation, postCount and reactionCount default to 0.",
+        "requestBody": {
+          "description": "Badge to create",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BadgeInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Badge"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - request body missing, or Title / Description missing",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "error": "Missing parameters, please review data"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/badges/{id}": {
+      "get": {
+        "summary": "Get badge by specific ID",
+        "description": "Get a detailed badge with a specific ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id of selected badge",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Badge"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "error": "Badge not found with id: 01a18710-a6c5-73c8-b9bc-f07aeb27dcc4"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "error": "Failed to retrieve badge"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Modify badge with specified ID",
+        "description": "Modify a badge with specified ID. Title and Description are required. isAdmin, isPlusMember and isVerifiedArtist cannot be changed through this endpoint.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id of selected badge",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "New badge data",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BadgeInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK - returns the updated badge",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Badge"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - request body missing, or Title / Description missing",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "error": "Missing parameters, please review data"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "error": "Badge not found with id: 01a18710-a6c5-73c8-b9bc-f07aeb27dcc4"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "error": "Failed to update badge"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete badge with specified ID",
+        "description": "Destroy a badge with specified id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id of selected badge",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "error": "Badge with this id does not exist: 01a18710-a6c5-73c8-b9bc-f07aeb27dcc4"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -138,6 +380,132 @@
           "ReleaseDate": {
             "type": "string",
             "example": "01/01/2001"
+          }
+        }
+      },
+      "BadgeListItem": {
+        "title": "Badge List Item",
+        "description": "Short badge info returned by GET /badges",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "01a18710-a6c5-73c8-b9bc-f07aeb27dcc4"
+          },
+          "Title": {
+            "type": "string",
+            "example": "Verified Artist"
+          }
+        }
+      },
+      "Badge": {
+        "title": "Badge",
+        "description": "Full badge as stored in the database",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "01a18710-a6c5-73c8-b9bc-f07aeb27dcc4"
+          },
+          "Title": {
+            "type": "string",
+            "example": "Verified Artist"
+          },
+          "Description": {
+            "type": "string",
+            "example": "Awarded to verified artists on Notates"
+          },
+          "DateObtained": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "example": "2026-10-29T10:00:00.000Z"
+          },
+          "JoinDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "example": "2026-01-15T00:00:00.000Z"
+          },
+          "isAdmin": {
+            "type": "boolean",
+            "example": false
+          },
+          "postCount": {
+            "type": "integer",
+            "example": 25
+          },
+          "isPlusMember": {
+            "type": "boolean",
+            "example": false
+          },
+          "reactionCount": {
+            "type": "integer",
+            "example": 150
+          },
+          "isVerifiedArtist": {
+            "type": "boolean",
+            "example": false
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2026-10-29T09:49:37.863Z"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2026-10-29T09:49:37.863Z"
+          }
+        }
+      },
+      "BadgeInput": {
+        "title": "Badge Input",
+        "description": "Request body for creating or modifying a badge. isAdmin, isPlusMember and isVerifiedArtist are not accepted.",
+        "type": "object",
+        "required": [
+          "Title",
+          "Description"
+        ],
+        "properties": {
+          "Title": {
+            "type": "string",
+            "example": "Verified Artist"
+          },
+          "Description": {
+            "type": "string",
+            "example": "Awarded to verified artists on Notates"
+          },
+          "DateObtained": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2026-10-29T10:00:00.000Z"
+          },
+          "JoinDate": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2026-01-15T00:00:00.000Z"
+          },
+          "postCount": {
+            "type": "integer",
+            "example": 25
+          },
+          "reactionCount": {
+            "type": "integer",
+            "example": 150
+          }
+        }
+      },
+      "Error": {
+        "title": "Error",
+        "description": "Error message returned by the API",
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string",
+            "example": "Missing parameters, please review data"
           }
         }
       }
