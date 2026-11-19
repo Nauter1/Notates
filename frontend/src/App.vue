@@ -52,7 +52,7 @@ async function deleteBadge(){
       <h1>Notates</h1>
       <nav>
         <RouterLink to="/posts">Posts</RouterLink>
-        <RouterLink to="/users">Users</RouterLink>
+        <RouterLink to="/register">Users</RouterLink>
       </nav>
     </header>
     <main>
