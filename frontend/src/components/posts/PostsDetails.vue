@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {ref,watch} from "vue"
-import {postsServices} from "../services/postsServices"
-import type { Post } from "../types/Posts"
+import {postsServices} from "../../services/postsServices"
+import type { Post } from "../../types/Posts"
 
 const props = defineProps<{
     postId: string

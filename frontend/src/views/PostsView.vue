@@ -2,9 +2,9 @@
 
     import { ref } from 'vue'
     
-    import PostsList from '../components/PostsList.vue';
-    import PostsDetails from '../components/PostsDetails.vue'
-    import PostForm from '../components/PostForm.vue'
+    import PostsList from '../components/posts/PostsList.vue';
+    import PostsDetails from '../components/posts/PostsDetails.vue'
+    import PostForm from '../components/posts/PostForm.vue'
     import { postsServices } from "../services/postsServices.ts";
 
     const editing = ref(false)
