@@ -24,22 +24,29 @@ function emptyPost(): PostInput {
     }
 }
 
+
 const form = ref<PostInput>(emptyPost())
 
-async  function loadPost(){
+// async function loadCategories() {
+//     try {
+//         categories.value = ["01a1d086-eb63-703f-a886-f10f75a50f34","sss"]
+//     }
+// }
+
+async function loadPost() {
     error.value = ""
-    if (!props.postId){
+    if (!props.postId) {
         form.value = emptyPost()
         return
     }
     try {
         const post = await postsServices.getById(props.postId)
-        form.value = {
+        form.value= {
             PostTitle: post.PostTitle,
             PostDescription: post.PostDescription,
             ReleaseDate: post.ReleaseDate,
-            ContentLink: post.PostTitle,
-            id: post.id,
+            ContentLink: post.ContentLink,
+            id: post.id
         }
     } catch (err) {
         error.value = "Cannot load this post"
@@ -80,7 +87,10 @@ async function savePost() {
     }
 }
 
-watch ( () => props.postId, loadPost, {immediate: true})
+// onMounted(loadCategories)
+
+watch( () => props.postId, loadPost, {immediate: true})
+
 
 </script>
 

@@ -63,7 +63,7 @@
     <section v-if="editing">
       <button @click="editing = false">Cancel Edit</button>
       <PostForm 
-      :Post-id="selectedPostId"
+      :post-id="selectedPostId"
       @saved="PostSaved"/>
     </section>
   </p>
