@@ -47,24 +47,36 @@ async  function loadPost(){
     }
 }
 
-async function savePost(){
+async function savePost() {
     saving.value = true
     error.value = ""
+
+    console.log("I HAVE CLICKED DA EDIT BATON to saev")
     try {
-        if (props.postId){
+        if (props.postId) {
             await postsServices.update(props.postId, form.value)
+            console.log("try-if")
         } else {
             await postsServices.create(form.value)
+            console.log("try-else")
         }
+        console.log(form.value)
 
         emit("saved")
 
-        if (props.postId) {form.value = emptyPost()}
+        console.log("try-/")
+        if (props.postId) 
+        {
+            console.log("try-2if")
+            form.value=emptyPost()
+        }
     } catch (err) {
-        error.value = "Saving failed."
+        console.log("catch")
+        error.value = "Saving failed"
         console.error(err)
     } finally {
         saving.value = false
+        console.log("finally")
     }
 }
 

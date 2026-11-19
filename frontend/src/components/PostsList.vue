@@ -38,7 +38,7 @@ onMounted(loadPosts)
         <p v-else-if="posts.length === 0">No posts found</p>
         <ul v-else>
             <li v-for="post in posts" :key="post.id">
-                <button @click="emit('select', post.id)">{{ post.Title }}</button> ( {{ post.id }})
+                <button @click="emit('select', post.id)">{{ post.PostTitle }}</button> ( {{ post.id }})
             </li>
         </ul>
     </section>

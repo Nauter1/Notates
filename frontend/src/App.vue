@@ -43,48 +43,25 @@ async function deleteBadge(){
   }
 }
 
-import PostsList from './components/PostsList.vue';
-import PostsDetails from './components/PostsDetails.vue'
-import PostForm from './components/PostForm.vue'
-import { postsServices } from "./services/postsServices.ts";
-
-const selectedPostId = ref<string | null>(null)
-
-function selectPost(id: string){
-  selectedPostId.value = id
-  editing.value = false
-}
-function createPost(){
-  selectedPostId.value = null
-  editing.value = true
-}
-
-function PostSaved(){
-  editing.value = false
-  listVersion.value++
-  detailsVersion.value++
-}
-
-async function deletePost(){
-  if (!selectedPostId.value) return
-  if (!confirm("Delete this game?")) return
-
-  error.value = ""
-
-  try{
-    await postsServices.delete(selectedPostId.value)
-    selectedPostId.value = null
-    editing.value = false
-    listVersion.value++
-  } catch (err) {
-    error.value = "Cannot delete this post"
-    console.error(err)
-  }
-}
 
 </script>
 
 <template>
+  <div>
+    <header>
+      <h1>Notates</h1>
+      <nav>
+        <RouterLink to="/posts">Posts</RouterLink>
+        <RouterLink to="/users">Users</RouterLink>
+      </nav>
+    </header>
+    <main>
+      <RouterView/>
+    </main>
+  </div>
+</template>
+
+<!--<template>
   <h1>You did it!</h1>
   <button @click="createBadge">Add Badge</button>
   <p v-if="error">{{ error }}</p>
@@ -123,6 +100,6 @@ async function deletePost(){
     Visit <a href="https://vuejs.org/" target="_blank" rel="noopener">vuejs.org</a> to read the
     documentation
   </p>
-</template>
+</template>-->
 
 <style scoped></style>

@@ -22,7 +22,7 @@ export const postsServices = {
        return request<PostSummary[]>("/posts") 
     },
     getById(id: string): Promise<Post> {
-       return request<Post>("/posts") 
+       return request<Post>(`/posts/${id}`)
     },
     create(post:PostInput): Promise<void> {
         return request<void>("/posts", {

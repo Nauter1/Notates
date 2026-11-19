@@ -1,7 +1,7 @@
 export interface PostSummary {
     id: string,
-    Title: string,
-    Description: string,
+    PostTitle: string,
+    PostDescription: string,
 }
 export interface Post {
      //musthave
