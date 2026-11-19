@@ -30,6 +30,16 @@
       "post": {
         "summary": "Post Create method",
         "description": "Post Create method for creating posts",
+        "requestBody": {
+          "description": "Request Body for creating a post",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PostListItem"
+              }
+            }
+          }
+        },
         "responses": {
           "201": {
             "description": "Created"
@@ -78,7 +88,11 @@
         "requestBody": {
           "description": "Required information to make a post",
           "content": {
-            "application/json": {}
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PostListItem"
+              }
+            }
           },
           "required": true
         },
@@ -200,8 +214,8 @@
             "description": "id of selected badge",
             "required": true,
             "schema": {
-              "type": "string",
-              "format": "uuid"
+              "format": "uuid",
+              "type": "string"
             }
           }
         ],
@@ -254,8 +268,8 @@
             "description": "id of selected badge",
             "required": true,
             "schema": {
-              "type": "string",
-              "format": "uuid"
+              "format": "uuid",
+              "type": "string"
             }
           }
         ],
@@ -332,8 +346,8 @@
             "description": "id of selected badge",
             "required": true,
             "schema": {
-              "type": "string",
-              "format": "uuid"
+              "format": "uuid",
+              "type": "string"
             }
           }
         ],
@@ -353,6 +367,84 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/reactions": {
+      "summary": "Get a reaction",
+      "description": "Get a reaction",
+      "get": {
+        "summary": "Get a Game from the list",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReactionsListItem"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a specific reaction",
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/reactions/reaction": {
+      "post": {
+        "requestBody": {
+          "content": {
+            "application/json": {}
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/reactions/comment": {
+      "post": {
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/reactions/{id}": {
+      "summary": "Get a reaction",
+      "description": "Get a reaction",
+      "get": {
+        "summary": "Get a Game from the list",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReactionsListItem"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a specific reaction",
+        "responses": {
+          "200": {
+            "description": "Success"
           }
         }
       }
@@ -389,8 +481,8 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
             "format": "uuid",
+            "type": "string",
             "example": "01a18710-a6c5-73c8-b9bc-f07aeb27dcc4"
           },
           "Title": {
@@ -405,8 +497,8 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
             "format": "uuid",
+            "type": "string",
             "example": "01a18710-a6c5-73c8-b9bc-f07aeb27dcc4"
           },
           "Title": {
@@ -418,16 +510,16 @@
             "example": "Awarded to verified artists on Notates"
           },
           "DateObtained": {
-            "type": "string",
             "format": "date-time",
-            "nullable": true,
-            "example": "2026-10-29T10:00:00.000Z"
+            "type": "string",
+            "example": "2026-10-29T10:00:00.000Z",
+            "nullable": true
           },
           "JoinDate": {
-            "type": "string",
             "format": "date-time",
-            "nullable": true,
-            "example": "2026-01-15T00:00:00.000Z"
+            "type": "string",
+            "example": "2026-01-15T00:00:00.000Z",
+            "nullable": true
           },
           "isAdmin": {
             "type": "boolean",
@@ -450,13 +542,13 @@
             "example": false
           },
           "createdAt": {
-            "type": "string",
             "format": "date-time",
+            "type": "string",
             "example": "2026-10-29T09:49:37.863Z"
           },
           "updatedAt": {
-            "type": "string",
             "format": "date-time",
+            "type": "string",
             "example": "2026-10-29T09:49:37.863Z"
           }
         }
@@ -464,11 +556,11 @@
       "BadgeInput": {
         "title": "Badge Input",
         "description": "Request body for creating or modifying a badge. isAdmin, isPlusMember and isVerifiedArtist are not accepted.",
-        "type": "object",
         "required": [
           "Title",
           "Description"
         ],
+        "type": "object",
         "properties": {
           "Title": {
             "type": "string",
@@ -479,13 +571,13 @@
             "example": "Awarded to verified artists on Notates"
           },
           "DateObtained": {
-            "type": "string",
             "format": "date-time",
+            "type": "string",
             "example": "2026-10-29T10:00:00.000Z"
           },
           "JoinDate": {
-            "type": "string",
             "format": "date-time",
+            "type": "string",
             "example": "2026-01-15T00:00:00.000Z"
           },
           "postCount": {
@@ -497,6 +589,11 @@
             "example": 150
           }
         }
+      },
+      "ReactionsListItem": {
+        "title": "Reactions List Item",
+        "description": "{\n\"id\":\"jabadabaduu\",\n\"Content\":\"message\"\n\n}",
+        "type": "object"
       },
       "Error": {
         "title": "Error",
