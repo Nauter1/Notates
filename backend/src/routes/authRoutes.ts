@@ -1,6 +1,7 @@
 import express from "express";
 import checkRequestBody from "../controllers/middleware/checkRequestBody.ts";
 import AuthenticationsController from "../controllers/AuthenticationsController.ts";
+import jwtAuth from "../controllers/middleware/jwlAuth.ts";
 
 const router = express.Router();
 
@@ -17,3 +18,5 @@ router.put("/:id", (req, res, next) => {
 router.delete("/:id", (req, res, next) => {
     next();
 }, AuthenticationsController.invalidateToken);
+
+export default router;

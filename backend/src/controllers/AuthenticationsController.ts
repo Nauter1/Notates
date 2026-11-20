@@ -82,5 +82,18 @@ const AuthenticationsController = {
             EmailAddress: user.EmailAddress,
             AccountType: user.AccountType
         })
+    },
+
+    async invalidateToken(req: express.Request, res: express.Response){
+        res.clearCookie("accessToken",{
+            httpOnly: true,
+            secure: false,
+            sameSite: "strict",
+            path: "/"
+        })
+        return res.status(200).send({
+            message: "You have been logged out."
+        })
     }
 }
+export default AuthenticationsController

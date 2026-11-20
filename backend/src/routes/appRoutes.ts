@@ -8,6 +8,7 @@ import UserBadgesController from "../controllers/UserBadgesController.ts";
 import UserController from "../controllers/UserController.ts";
 import userPostsController from "../controllers/UserPostsController.ts";
 import authRoutes from "./authRoutes.ts"
+import jwtAuth from "../controllers/middleware/jwlAuth.ts";
 
 export default (app: express.Express): void => {
     //reaktsioonid

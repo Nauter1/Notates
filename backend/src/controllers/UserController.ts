@@ -34,6 +34,13 @@ const UsersController = {
 
     },
     async getAll(req: express.Request, res: express.Response) {
+        if (!res.locals.userId){
+            return res.status(403).send({error: "Access denied"})
+        }
+        const handler = await db.users.findByPk(res.locals.userId)
+        if (handler?.AccountType !== "admin" || !handler){
+            return res.status(403).send({error: "Access denied"})
+        }
         const users = await db.users.findAll();
         console.log("getAll"+users)
         return res.status(200).send(users.map(
@@ -48,6 +55,10 @@ const UsersController = {
         return res.status(200).send(user)
     },
     async modifyById(req: express.Request, res: express.Response) {
+        if (req.params.id !== res.locals.userId) {
+            return res.status(403).send({error:"Access denied"})
+        }
+
         if (!req.params.id) {
             return res.status(400).send({"error":"No id supplied"})
         }
