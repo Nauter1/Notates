@@ -8,7 +8,6 @@ import UserBadgesController from "../controllers/UserBadgesController.ts";
 import UserController from "../controllers/UserController.ts";
 import userPostsController from "../controllers/UserPostsController.ts";
 
-
 export default (app: express.Express): void => {
     //reaktsioonid
     app.route("/reactions")
@@ -51,6 +50,8 @@ export default (app: express.Express): void => {
         .delete(UserController.deleteById)   // D elete
         .get(UserController.getById)
         .put(checkRequestBody, UserController.modifyById)      // U pdate
+
+    
 
 
     app.route("/badges")
