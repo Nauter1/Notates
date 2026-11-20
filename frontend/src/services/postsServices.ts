@@ -3,7 +3,7 @@ const API_URL = import.meta.env.VITE_BACKEND_URL
 
 async function request<T>(endpoint: string, options?: RequestInit): Promise<T> {
     const response = await fetch(API_URL + endpoint, options)
-
+    
     if (!response.ok) {
         throw new Error(
             `Request has failed, status: ${response.status}` 
@@ -12,6 +12,7 @@ async function request<T>(endpoint: string, options?: RequestInit): Promise<T> {
     if (response.status === 204) {
         return undefined as T
     }
+    
     return response.json() as Promise<T>
 }
 
@@ -28,9 +29,10 @@ export const postsServices = {
         return request<void>("/posts", {
             method: "POST",
             headers: {
-                "Contest-Type": "application/json"
+                "Content-Type": "application/json"
             },
             body: JSON.stringify(post)
+            
         })
     },
     update(id: string, post: PostInput): Promise<void> {

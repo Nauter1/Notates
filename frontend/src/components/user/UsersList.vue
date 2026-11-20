@@ -16,6 +16,7 @@ const emit = defineEmits<{
 async function loadUsers(){
     loading.value = true
     error.value = ""
+    console.log("Getting users")
 
     try {
         users.value = await usersServices.getAll()

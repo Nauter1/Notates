@@ -18,9 +18,8 @@ function emptyPost(): PostInput {
     return {
         PostTitle: "",
         PostDescription: "",
-        id: "",
         ReleaseDate: new Date(),
-        ContentLink: "",
+        ContentLink: ""
     }
 }
 
@@ -46,7 +45,6 @@ async function loadPost() {
             PostDescription: post.PostDescription,
             ReleaseDate: post.ReleaseDate,
             ContentLink: post.ContentLink,
-            id: post.id
         }
     } catch (err) {
         error.value = "Cannot load this post"
@@ -105,7 +103,7 @@ watch( () => props.postId, loadPost, {immediate: true})
             <input id="PostDescription" v-model="form.PostDescription" required/><br/>
 
             <label for="ReleaseDate">ReleaseDate</label>
-            <input id="ReleaseDate" v-model="form.ReleaseDate" required/><br/>
+            <input type="date" id="ReleaseDate" v-model="form.ReleaseDate" required/><br/>
 
             <label for="ContentLink">ContentLink</label>
             <input id="ContentLink" v-model="form.ContentLink" required/><br/>

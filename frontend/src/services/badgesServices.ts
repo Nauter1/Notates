@@ -28,7 +28,7 @@ export const badgesServices = {
         return request<void>("/badges", {
             method: "POST",
             headers: {
-                "Contest-Type": "application/json"
+                "Content-Type": "application/json"
             },
             body: JSON.stringify(badge)
         })

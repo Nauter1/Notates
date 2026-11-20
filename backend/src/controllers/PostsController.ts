@@ -7,6 +7,7 @@ import { Post } from "../models/Post.ts";
 
 const PostsController = {
     async create(req: express.Request, res: express.Response)  {
+        console.log(req.body)
         const requiredFields = ["PostTitle","PostDescription","ReleaseDate","ContentLink"]
         const missingFields = requiredFields.filter(field => !req.body[field]);
         if (missingFields.length > 0){
@@ -25,7 +26,7 @@ const PostsController = {
         const createdPost = await db.posts.create(newPost);
 
         return res
-        .location(`${Utilities.getBaseURL(req)}/posts/${createdPost.id}`).sendStatus(201);
+        .location(`${Utilities.getBaseURL(req)}/posts/${createdPost.id}`).send({"OK":"OK"}).status(201);
     },
     async getAll(req: express.Request, res: express.Response) {
         const posts = await db.posts.findAll();

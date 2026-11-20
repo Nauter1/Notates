@@ -14,6 +14,19 @@ export interface User extends UserSummary {
     ReviewListID: string | null,
     ProfileID: string | null,
     CredentialID: string | null,
+}
+
+export interface UserRegister {
+    // Valikulised väljad uue kasutaja loomisel (kuna neil on vaikeväärtus või nad on nullitavad):
+    UserName: string,
+    EmailAddress: string,
+    SignupDate: string, 
+    AccountType: string,
+    AvatarName: string,
+    UserCollectionID: string | null,
+    ReviewListID: string | null,
+    ProfileID: string | null,
+    CredentialID: string | null,
     Password: string,
-    PasswordConfirmation: string | null,
+    PasswordConfirmation: string | null
 }

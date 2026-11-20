@@ -26,7 +26,6 @@ export interface PostInput {
      ContentLink: string;
   
       //canhave
-      id: string
        /*ImageURL: CreationOptional<string | null>
       IsOwnedBy: CreationOptional<number>
       Reviews: CreationOptional<Json | null>

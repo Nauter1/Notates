@@ -30,7 +30,7 @@ const UsersController = {
             PasswordHash: passwordHash
         });
 
-        return res.location(`${Utilities.getBaseURL(req)}/users/${result.id}`).sendStatus(201);
+        return res.location(`${Utilities.getBaseURL(req)}/users/${result.id}`).send({"OK":"OK"}).status(201);
 
     },
     async getAll(req: express.Request, res: express.Response) {

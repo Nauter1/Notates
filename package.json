@@ -18,6 +18,10 @@
   "bugs": {
     "url": "https://github.com/Nauter1/Notates/issues"
   },
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
   "homepage": "https://github.com/Nauter1/Notates#readme",
   "dependencies": {
     "concurrently": "^10.0.7"

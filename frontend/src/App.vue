@@ -61,7 +61,10 @@ async function deleteBadge(){
             <RouterLink class="btn" to="/posts">Posts</RouterLink>
           </li>
           <li class="nav-item">
-            <RouterLink class="btn" to="/register">Users</RouterLink>
+            <RouterLink class="btn" to="/users">Users</RouterLink>
+          </li>
+          <li class="nav-item">
+            <RouterLink class="btn" to="/register">Register a new user.</RouterLink>
           </li>
         </ul>
         <form class="form-inline my-2 my-md-0">

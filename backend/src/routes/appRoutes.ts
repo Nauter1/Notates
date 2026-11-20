@@ -43,6 +43,16 @@ export default (app: express.Express): void => {
         .get(PostsController.getByID)
         .put(checkRequestBody, PostsController.modifyById)      // U pdate
 
+    app.route("/users")
+        .post(checkRequestBody, UserController.create)         // C reate
+        .get(UserController.getAll)          // R ead
+
+    app.route("/users/:id")
+        .delete(UserController.deleteById)   // D elete
+        .get(UserController.getById)
+        .put(checkRequestBody, UserController.modifyById)      // U pdate
+
+
     app.route("/badges")
         .post(checkRequestBody, BadgesController.create)
         .get(BadgesController.getAll)
