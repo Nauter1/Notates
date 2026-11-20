@@ -7,6 +7,7 @@ import checkRequestBody from "../controllers/middleware/checkRequestBody.ts";
 import UserBadgesController from "../controllers/UserBadgesController.ts";
 import UserController from "../controllers/UserController.ts";
 import userPostsController from "../controllers/UserPostsController.ts";
+import authRoutes from "./authRoutes.ts"
 
 export default (app: express.Express): void => {
     //reaktsioonid
@@ -72,4 +73,8 @@ export default (app: express.Express): void => {
     // userPosts
 
     //app.route("/userposts").get(userPostsController.getAll).post(userPostsController.create)
+    app.use("/authentication", (req, res, next) => {
+        // #swagger.tags = ['Authentication']
+        next();
+    }, authRoutes);
 }
