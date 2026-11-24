@@ -2,6 +2,7 @@
 import { ref, onMounted, watch } from "vue"
 import { usersServices } from "@/services/usersServices"
 import type { UserRegister } from "@/types/User";
+import router from "@/router"
 
 const props = defineProps<{
     userId?: string | null
@@ -39,6 +40,8 @@ async function register(){
 
     try{
         await usersServices.register(form.value)
+        router.replace("/login")
+        console.log("try")
     } catch (err){
         error.value = "Saving failed"
         if (err instanceof Error){
