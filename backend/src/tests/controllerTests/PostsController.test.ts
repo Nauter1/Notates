@@ -259,5 +259,26 @@ describe("PostsController", () => {
         //CHECKITY CHECK DIS SHIZ
         expect(res.status).toHaveBeenCalledWith(400)
     })
+
+    test("Return_NotFoundOnDelete_With404Status", async () => {
+        const req = {
+            params: {
+                id: "01a18724-66dd-73d4-8c1c-8abbd5fa45f0"
+            }
+        } as unknown as Request;
+
+        const res = {
+            status: vi.fn().mockReturnThis(),
+            send: vi.fn().mockReturnThis()
+        } as unknown as Response;
+
+        // äksioñ
+        await _PostsController.deleteById(req, res);
+
+        //kontroll
+        expect(mocks.findByPk).toHaveBeenCalledExactlyOnceWith("01a18724-66dd-73d4-8c1c-8abbd5fa45f0");
+        expect(res.status).toHaveBeenCalledWith(404);
+        expect(res.send).toHaveBeenCalledWith(undefined);
+    });
     
 });
