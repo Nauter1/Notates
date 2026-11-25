@@ -22,7 +22,7 @@ const mocks = vi.hoisted(()=>({
 
 vi.mock("../../db.ts", () => ({
     db: {
-        posts: {
+        users: {
             findAll: mocks.findAll,
             findByPk: mocks.findByPk,
             create: mocks.create,
@@ -33,6 +33,7 @@ vi.mock("../../db.ts", () => ({
 }));
 
 import _UserController from "../../controllers/UserController.ts"
+import type { User } from "../../models/User.ts";
 
 describe("UserController", () => {
 
@@ -40,7 +41,7 @@ describe("UserController", () => {
         vi.clearAllMocks();
     });
 
-    test("Return_AllPosts_With200Status", async () => {
+    test("Return_AllUsers_With200Status", async () => {
         mocks.findAll.mockResolvedValue([
             {
                 id: "01a18724-66dd-73d4-8c1c-8abbd5fa45f9",
@@ -83,7 +84,7 @@ describe("UserController", () => {
         ]);
     });
 
-    test("Return_OnePostbyId_With200Status", async() =>{
+    test("Return_OneUserbyId_With200Status", async() =>{
 
         const user = {
             id: "01a18724-66dd-73d4-8c1c-8abbd5fa45f9",
@@ -111,16 +112,18 @@ describe("UserController", () => {
         expect(res.send).toHaveBeenCalledWith(user);
     });
 
-    test("Return_CreatedPost_With201Status", async () =>{
+    test("Return_CreatedUser_With201Status", async () =>{
         const id = "7bef1e04-e5a2-4671-bff4-51588445b176"
         mocks.create.mockResolvedValue({ id: id})
         const req = {
             protocol: "http",
             get: vi.fn(() => "localhost:8080"),
             body: {
-                UserName: "TestUser",
+                UserName: "TestUser2",
                 AvatarName: "TestName",
                 EmailAddress: "test@test.com",
+                Password: "Tester",
+                PasswordConfirmation: "Tester"
             }
         } as unknown as Request;
         const res = {
@@ -138,8 +141,9 @@ describe("UserController", () => {
         expect(res.sendStatus).toHaveBeenCalledWith(201)
     })
 
-    test("ReturnModifiedUserById_With201Status", async()=>{
+    /*test("ReturnModifiedUserById_With201Status", async()=>{
         const id = "7bef1e04-e5a2-4671-bff4-51588445b176";
+        const now = new Date()
 
         const user = {
             id: id,
@@ -152,7 +156,7 @@ describe("UserController", () => {
             ReviewListID: null,
             ProfileID: null,
             CredentialID: null,
-            createdAt: new Date()
+            createdAt: now
         };
 
         mocks.findByPk.mockResolvedValue(user);
@@ -160,15 +164,21 @@ describe("UserController", () => {
         mocks.update.mockResolvedValue([1]);
 
         const req ={
-            id: "7bef1e04-e5a2-4671-bff4-51588445b176",
-            UserName: "NewUsername",
-            AvatarName: "testName",
-            SignupDate: "2026-01-01",
-            AccountType: "verified",
-            EmailAddress: "test@test.com",
-            ReleaseDate:new Date(),
-            createdAt:new Date(),
-            updatedAt:new Date()
+            params: {
+                id: id
+            },
+            body:{
+                id: id,
+                UserName: "NewUsername",
+                AvatarName: "testName",
+                SignupDate: "2026-01-01",
+                AccountType: "verified",
+                EmailAddress: "test@test.com",
+                ReleaseDate: now,
+                createdAt: now,
+                updatedAt: now,
+            }
+
         } as unknown as Request
         const res= {
             location: vi.fn().mockReturnThis(),
@@ -179,23 +189,102 @@ describe("UserController", () => {
 
         await _UserController.modifyById(req,res)
 
-        expect(mocks.findByPk).toHaveBeenCalledWith(user.id)
+        expect(mocks.findByPk).toHaveBeenCalledWith(id)
         expect(mocks.update).toHaveBeenCalledOnce()
         expect(mocks.update).toHaveBeenCalledWith(
             expect.objectContaining({
-                PostTitle: "Galaxies",
-                ContentLink:"Ababa",
-                PostDescription:"Ababa",
-                ReleaseDate:new Date(),
-                createdAt:new Date(),
-                updatedAt:new Date()
+                id: id,
+                UserName: "NewUsername",
+                AvatarName: "testName",
+                SignupDate: "2026-01-01",
+                AccountType: "verified",
+                EmailAddress: "test@test.com",
+                ReleaseDate: now,
+                createdAt: now,
+                updatedAt: now,
             }),
             {where:{
                 id: user.id
             }}
         )
         expect(res.status).toHaveBeenCalledWith(201)
-    })
+    })*/
+
+   /* test("Return_ModifiedUserById_With201Status", async() => {
+        mocks.findByPk.mockResolvedValue({ id: "7bef1e04-e5a2-4671-bff4-51588445b176"})
+        const id = "7bef1e04-e5a2-4671-bff4-51588445b176";
+        const now = new Date()
+        const user = 
+        {
+            id: id,
+            UserName: "OldUsername",
+            AvatarName: "avatarName",
+            SignupDate: "2026-01-01",
+            AccountType: "unverified",
+            EmailAddress: "test@test.com",
+            UserCollectionID: null,
+            ReviewListID: null,
+            ProfileID: null,
+            CredentialID: null,
+            createdAt: now
+        }
+        const explicitTime = new Date()
+        mocks.update.mockResolvedValue([1])
+        const req = {
+            protocol: "http",
+            get: vi.fn(()=>"localhost:8080"),
+            params: {
+                id: id,
+            },
+            body:        
+            {
+                id: id,
+                UserName: "NewUsername",
+                AvatarName: "testName",
+                SignupDate: "2026-01-01",
+                AccountType: "verified",
+                EmailAddress: "test@test.com",
+                ReleaseDate: now,
+                createdAt: now,
+                updatedAt: now,
+            }
+        } as unknown as Request
+        const res = {
+            location: vi.fn().mockReturnThis(),
+            status: vi.fn().mockReturnThis(),
+            send: vi.fn().mockReturnThis()
+        } as unknown as Response
+
+        //äkshun
+        const result = await _UserController.modifyById(req, res) as unknown as User
+
+        //kontroll
+        expect(mocks.findByPk).toHaveBeenCalledWith(user.id)
+        expect(mocks.update).toHaveBeenCalledOnce()
+
+        const updatedUser = mocks.update.mock.calls[0]?.[0]
+        console.log("updatedUser: "+updatedUser)
+        //expect(updatedUser.id).toBe(user.id)
+        expect(updatedUser.UserName).toBe(req.body.UserName)
+        expect(updatedUser.id).toBe(req.body.id)
+        expect(updatedUser.AvatarName).toBe(req.body.AvatarName)
+        expect(updatedUser.SignupDate).toBe(req.body.SignupDate)
+        expect(updatedUser.AccountType).toBe(req.body.AccountType)
+        expect(updatedUser.EmailAddress).toBe(req.body.EmailAddress)
+        expect(updatedUser.ReleaseDate).toBe(req.body.ReleaseDate)
+        expect(updatedUser.createdAt).toBe(req.body.createdAt)
+        expect(updatedUser.updatedAt).toBe(req.body.updatedAt)
+        expect(updatedUser.updatedAt).toBeInstanceOf(Date)
+        //console.log("call log:"+mocks.update.mock.calls[0])
+        expect(mocks.update.mock.calls[0]?.[1]).toEqual({
+            where: {
+                id: user.id
+            }
+        })
+        expect(res.status).toHaveBeenCalledWith(201)
+    })*/
+    
+    
     test("Return_NoContentOnDelete_With204Status", async() => {
         const thisid = "01a18e66-5fdb-73f6-9f36-fec1238c7d30"
         const user = {

@@ -42,9 +42,11 @@ const PostsController = {
     async getByID(req: express.Request, res: express.Response) {
         
         const post = await PostsController.getPost(req, res)
-        if (!post) {
+        if (!post || post === undefined || post === null) {
             console.log("no post")
-            return
+            return res.status(404).send({
+                error: `Post with this ID is not found. ${req.params.id}`
+            })
         }
         console.log("Post is found")
         return res.status(200).send(post);
@@ -135,9 +137,7 @@ const PostsController = {
         const post = await db.posts.findByPk(postID);
         if (!post) {
             console.log("Post not found")
-            res.status(404).send({
-                error: `Post with this ID is not found. ${postID}`
-            })
+            res.status(404)
             return null;
         }
         return post
