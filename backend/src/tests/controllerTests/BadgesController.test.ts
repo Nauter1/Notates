@@ -130,4 +130,64 @@ describe("BadgesController", () => {
             expect(res.json).toHaveBeenCalledWith(created);
         });
     });
+
+    describe("getBadge", () => {
+        test("Return_400_WhenIdMissing", async () => {
+            const req = { params: {} } as unknown as Request;
+            const res = makeRes();
+
+            await BadgesController.getBadge(req, res);
+
+            expect(mocks.findByPk).not.toHaveBeenCalled();
+            expect(res.status).toHaveBeenCalledWith(400);
+            expect(res.json).toHaveBeenCalledWith({
+                error: "Invalid or missing badge id"
+            });
+        });
+
+        test("Return_404_WhenBadgeNotFound", async () => {
+            mocks.findByPk.mockResolvedValue(null);
+            const id = "01a18710-a6c5-73c8-b9bc-f07aeb27dcc4";
+            const req = { params: { id } } as unknown as Request;
+            const res = makeRes();
+
+            await BadgesController.getBadge(req, res);
+
+            expect(mocks.findByPk).toHaveBeenCalledExactlyOnceWith(id);
+            expect(res.status).toHaveBeenCalledWith(404);
+            expect(res.json).toHaveBeenCalledWith({
+                error: `Badge not found with id: ${id}`
+            });
+        });
+
+        test("Return_OneBadge_With200Status", async () => {
+            const badge = {
+                id: "01a18710-a6c5-73c8-b9bc-f07aeb27dcc4",
+                Title: "Verified Artist",
+                Description: "Awarded to verified artists on Notates",
+            };
+            mocks.findByPk.mockResolvedValue(badge);
+            const req = { params: { id: badge.id } } as unknown as Request;
+            const res = makeRes();
+
+            await BadgesController.getBadge(req, res);
+
+            expect(mocks.findByPk).toHaveBeenCalledExactlyOnceWith(badge.id);
+            expect(res.status).toHaveBeenCalledWith(200);
+            expect(res.json).toHaveBeenCalledWith(badge);
+        });
+
+        test("Return_500_WhenDatabaseFails", async () => {
+            mocks.findByPk.mockRejectedValue(new Error("db down"));
+            const req = { params: { id: "some-id" } } as unknown as Request;
+            const res = makeRes();
+
+            await BadgesController.getBadge(req, res);
+
+            expect(res.status).toHaveBeenCalledWith(500);
+            expect(res.json).toHaveBeenCalledWith({
+                error: "Failed to retrieve badge"
+            });
+        });
+    });
 });
