@@ -339,4 +339,38 @@ describe("BadgesController", () => {
             expect(res.send).toHaveBeenCalledWith();
         });
     });
+
+    describe("getAll", () => {
+        test("Return_AllBadges_With200Status", async () => {
+            const badges = [
+                { id: "01a18710-a6c5-73c8-b9bc-f07aeb27dcc4", Title: "Verified Artist" },
+                { id: "01a18753-a318-778f-bd34-ecd0b2f0924c", Title: "Prolific Poster" },
+            ];
+            mocks.findAll.mockResolvedValue(badges);
+            const req = {} as Request;
+            const res = makeRes();
+
+            await BadgesController.getAll(req, res);
+
+            expect(mocks.findAll).toHaveBeenCalledOnce();
+            expect(mocks.findAll).toHaveBeenCalledWith({
+                attributes: ["id", "Title"]
+            });
+            expect(res.status).toHaveBeenCalledWith(200);
+            expect(res.json).toHaveBeenCalledWith(badges);
+        });
+
+        test("Return_500_WhenDatabaseFails", async () => {
+            mocks.findAll.mockRejectedValue(new Error("db down"));
+            const req = {} as Request;
+            const res = makeRes();
+
+            await BadgesController.getAll(req, res);
+
+            expect(res.status).toHaveBeenCalledWith(500);
+            expect(res.json).toHaveBeenCalledWith({
+                error: "Failed to retrieve badges"
+            });
+        });
+    });
 });
