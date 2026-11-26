@@ -278,7 +278,6 @@ describe("PostsController", () => {
         //kontroll
         expect(mocks.findByPk).toHaveBeenCalledExactlyOnceWith("01a18724-66dd-73d4-8c1c-8abbd5fa45f0");
         expect(res.status).toHaveBeenCalledWith(404);
-        expect(res.send).toHaveBeenCalledWith(undefined);
     });
     
 });

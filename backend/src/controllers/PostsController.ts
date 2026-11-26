@@ -124,7 +124,8 @@ const PostsController = {
     async deleteById(req: express.Request, res: express.Response) {
         const postToBeDeleted = await PostsController.getPost(req, res)
         if (!postToBeDeleted) {
-            return;
+            res.status(404)
+            return undefined;
         }
         await postToBeDeleted.destroy();
         return res.status(204)
