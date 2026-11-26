@@ -15,7 +15,7 @@ router.put("/:id", (req, res, next) => {
     next();
 }, checkRequestBody, AuthenticationsController.refreshToken);
 
-router.delete("/:id", (req, res, next) => {
+router.delete("/logout", (req, res, next) => {
     next();
 }, AuthenticationsController.invalidateToken);
 
