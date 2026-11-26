@@ -58,7 +58,7 @@ async function deleteBadge(){
       <div class="collapse navbar-collapse" id="navbarsExample02">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item active">
-            <RouterLink class="btn" to="/posts">Posts</RouterLink>
+            <RouterLink id="RL_Posts" class="btn" to="/posts">Posts</RouterLink>
           </li>
           <li class="nav-item">
             <RouterLink class="btn" to="/users">Users</RouterLink>

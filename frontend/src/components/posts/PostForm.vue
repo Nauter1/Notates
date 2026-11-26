@@ -103,13 +103,13 @@ watch( () => props.postId, loadPost, {immediate: true})
             <input id="PostDescription" v-model="form.PostDescription" required/><br/>
 
             <label for="ReleaseDate">ReleaseDate</label>
-            <input type="date" id="ReleaseDate" v-model="form.ReleaseDate" required/><br/>
+            <input id="ReleaseDate" v-model="form.ReleaseDate" required/><br/> <!-- type="date" -->
 
             <label for="ContentLink">ContentLink</label>
             <input id="ContentLink" v-model="form.ContentLink" required/><br/>
 
             <p v-if="error">{{  error }}</p>
-            <button type="submit" :disabled="saving">
+            <button id="savePost" type="submit" :disabled="saving">
                 {{  saving ? "Saving post.." : "Save Post" }}
             </button>
         </form>

@@ -51,7 +51,7 @@
 
 <template>
   <main>
-  <button @click="createPost">Add Post</button>
+  <button id="CreatePost" @click="createPost">Add Post</button>
   <p v-if="error">{{ error }}</p>
   <p>
     <PostsList :key="listVersion" @select="selectPost" />
