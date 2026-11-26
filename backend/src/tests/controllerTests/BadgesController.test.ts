@@ -293,4 +293,50 @@ describe("BadgesController", () => {
             });
         });
     });
+
+    describe("deleteById", () => {
+        test("Return_400_WhenNoIdSupplied", async () => {
+            const req = { params: {} } as unknown as Request;
+            const res = makeRes();
+
+            await BadgesController.deleteById(req, res);
+
+            expect(mocks.findByPk).not.toHaveBeenCalled();
+            expect(res.status).toHaveBeenCalledWith(400);
+            expect(res.send).toHaveBeenCalledWith({
+                error: "No badge id supplied"
+            });
+        });
+
+        test("Return_404_WhenBadgeDoesNotExist", async () => {
+            mocks.findByPk.mockResolvedValue(null);
+            const id = "01a18710-a6c5-73c8-b9bc-f07aeb27dcc4";
+            const req = { params: { id } } as unknown as Request;
+            const res = makeRes();
+
+            await BadgesController.deleteById(req, res);
+
+            expect(mocks.findByPk).toHaveBeenCalledExactlyOnceWith(id);
+            expect(res.status).toHaveBeenCalledWith(404);
+            expect(res.send).toHaveBeenCalledWith({
+                error: `Badge with this id does not exist: ${id}`
+            });
+        });
+
+        test("Return_204_WhenBadgeDeleted", async () => {
+            const id = "01a18710-a6c5-73c8-b9bc-f07aeb27dcc4";
+            const destroy = vi.fn().mockResolvedValue(undefined);
+            const badge = { id, destroy };
+            mocks.findByPk.mockResolvedValue(badge);
+            const req = { params: { id } } as unknown as Request;
+            const res = makeRes();
+
+            await BadgesController.deleteById(req, res);
+
+            expect(mocks.findByPk).toHaveBeenCalledExactlyOnceWith(id);
+            expect(destroy).toHaveBeenCalledOnce();
+            expect(res.status).toHaveBeenCalledWith(204);
+            expect(res.send).toHaveBeenCalledWith();
+        });
+    });
 });
