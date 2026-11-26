@@ -51,6 +51,7 @@
 
 <template>
   <main>
+  <br/>
   <button id="CreatePost" @click="createPost">Add Post</button>
   <p v-if="error">{{ error }}</p>
   <p>

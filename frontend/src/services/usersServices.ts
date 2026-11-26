@@ -1,29 +1,21 @@
-import type {User, UserSummary, UserRegister} from "../types/User"
+import { apiFetch } from "@/api/client"
+import type {User, UserSummary, UserRegister } from "../types/User"
 
 const API_URL = import.meta.env.VITE_BACKEND_URL
 
-async function request<T>(endpoint: string, options?: RequestInit): Promise<T> {
-    const response = await fetch(API_URL + endpoint, {...options, credentials: "include"})
-    if(!response.ok){
-        throw new Error(
-            `Request has failed, status is: ${response.status}`
-        )
-    }
-    return response.json() as Promise<T>
-}
-
 export const usersServices = {
-    getAll(): Promise<UserSummary[]>{
-        return request<UserSummary[]>("/users")
+    getAll(): Promise<UserSummary[]> {
+        return apiFetch<UserSummary[]>("/users")
     },
-    getById(id: string): Promise<User>{
-        return request<User>(`/users/${id}`)
+    getById(id: string): Promise<User> {
+        return apiFetch<User>(`/users/${id}`)
     },
-    register(user: UserRegister): Promise<void>{
-        return request<void>("/users",{
+    register(user:UserRegister): Promise<void> {
+        console.log(user)
+        return apiFetch<void>("/users", {
             method: "POST",
-            headers:{
-                "Content-Type":  "application/json"
+            headers: {
+                "Content-Type": "application/json"
             },
             body: JSON.stringify(user)
         })

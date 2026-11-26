@@ -2,15 +2,21 @@
 import router from "@/router"
 import { authenticationsServices } from "@/services/authenticationsServices"
 import { ref } from "vue"
+import { useRoute } from "vue-router"
+import { useAuth } from "@/composables/useAuth"
 
 const error = ref("")
 const email = ref("")
 const password = ref("")
 const saving = ref(false)
+const route = useRoute()
+const { setUser } = useAuth()
 
 const handleLogin = async () => {
     try {
         await authenticationsServices.login(email.value, password.value)
+        //const redirectPath = { route.query.redirect as string} || "/users"
+        setUser({UserName: "Unknown", id: "", EmailAddress:""})
         router.push("/users")
     } catch (err) {
         if (err instanceof Error) {

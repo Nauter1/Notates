@@ -4,70 +4,88 @@ import Utilities from "./Utilities.ts";
 import JWT from "jsonwebtoken"
 
 const AuthenticationsController = {
-    async newToken(req: express.Request, res: express.Response){
+    async newToken(req: express.Request, res: express.Response) {
+
+        // vaata kas staff on.
         const requiredFields = ["EmailAddress", "Password"];
         const missingFields = requiredFields.filter(
             field => !req.body?.[field]
-        )
-        if (missingFields.length > 0){
+        ) 
+        //kui ei, kisa anonüümselt
+        if (missingFields.length > 0) {
             return res.status(400).send({
                 error: "Some or all parameters are missing"
             });
         }
+        //tekita 2 muutujat, sinna omista parameetrid req.bodyst
         const {EmailAddress,Password} = req.body;
-        if(typeof EmailAddress !== "string" || typeof Password !== "string"){
+
+        //kui neid pole, kisa veelkord anonüümselt
+        if(typeof EmailAddress !== "string" || typeof Password !== "string") {
             return res.status(400).send({
                 error: "Some or all parameters are invalid"
             });
         }
 
+        //otsi kasutajat
         const user = await db.users.findOne({
             where: {
                 EmailAddress: EmailAddress
             }
         })
-        if (!user){
+
+        //kui kasutajat pole, kisa veel uuesti anonüümselt
+        if (!user) {
             return res.status(401).send({
-                error: "User is invalid"
-            })
-        }
-        const passwordMatches = await Utilities.lemmeIn(Password, user.PasswordHash)
-    
-        if (!passwordMatches){
-            return res.status(401).send({
-                error: "Some or all params are in valid"
-            })
+                error: "Some or all parameters are invalid"
+            });            
         }
 
-        const secret = process.env.JWT_SECRET
-        if (!secret){
-            return res.status(500).send({
-                error: "JWT secret is not configured."
-            })
+        //kontrolli kas parool on vastavuses hashiga
+        const passwordMatches = await Utilities.lemmeIn(Password, user.PasswordHash)
+
+        //kui ei, kisa jälle anonüümselt
+        if (!passwordMatches) {
+            return res.status(401).send({
+                error: "Some or all parameters are invalid"
+            });            
         }
-        const newToken = JWT.sign({},secret,
+        //otsi sekret
+        const secret = process.env.JWT_SECRET
+        //kui sekretit pole, siis serveri error
+        if (!secret) {
+            return res.status(500).send({
+                error: "JWT secret is not configured, contact system admin"
+            });   
+        }
+        //genereeri JWT
+        const newToken = JWT.sign(
+            {},
+            secret,
             {
-            subject: user.id,
-            expiresIn: "1h", 
-            algorithm:"HS256"
+                subject: user.id,
+                expiresIn: "1h",
+                algorithm: "HS256"
             }
         )
-    res.cookie("accessToken", newToken,{
-        httpOnly: true,
-        secure: false,
-        sameSite: "strict",
-        maxAge: 60*60*1000,
-        path: "/"
-    })
-    return res.status(200).send({
-        messsage: "Login Successful.",
-        user:{
-            id: user.id,
-            UserName: user.UserName,
-            EmailAddress: user.EmailAddress,
-            UserStatus: user.AccountType
-        }
-    })
+        res.cookie("accessToken", newToken, {
+            httpOnly: true,
+            secure: false,
+            sameSite: "strict",
+            maxAge: 60*60*1000,
+            path: "/"
+        })
+        console.log("User Logged in!!")
+        return res.status(200).send({
+            message: "Login Successful.",
+            user: {
+                userId: user.id,
+                UserName: user.UserName,
+                EmailAddress: user.EmailAddress,
+                AccountType: user.AccountType
+            }
+        })
+
     },
     async refreshToken(req: express.Request, res: express.Response){
         const user = await db.users.findByPk(res.locals.userId);

@@ -35,6 +35,7 @@ const UsersController = {
     },
     async getAll(req: express.Request, res: express.Response) {
         if (!res.locals.userId){
+            console.log("RES LOCALS FAILED !!")
             return res.status(403).send({error: "Access denied"})
         }
         const handler = await db.users.findByPk(res.locals.userId)

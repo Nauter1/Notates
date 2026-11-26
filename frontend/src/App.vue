@@ -43,7 +43,8 @@ async function deleteBadge(){
   }
 }
 
-
+import { useAuth } from "@/composables/useAuth.ts"
+const { user, logout } = useAuth()
 </script>
 
 <template>
@@ -63,12 +64,22 @@ async function deleteBadge(){
           <li class="nav-item">
             <RouterLink class="btn" to="/users">Users</RouterLink>
           </li>
+
+          <div v-if="user">
+              <span>Hello, {{ user.UserName }}</span>
+              <li class="nav-item">
+                <RouterLink class="btn" to="/logout">Logout</RouterLink>
+              </li>
+          </div>
+          <div v-else>
           <li class="nav-item">
             <RouterLink class="btn" to="/login">Login</RouterLink>
           </li>
+
           <li class="nav-item">
             <RouterLink class="btn" to="/register">Register a new user.</RouterLink>
           </li>
+          </div>
         </ul>
         <form class="form-inline my-2 my-md-0">
           <input class="form-control" type="text" placeholder="Search">
